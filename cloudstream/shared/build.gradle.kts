@@ -36,7 +36,7 @@ kotlin {
             implementation(libs.coil.network.ktor3)
             implementation(libs.bundles.compose)
             implementation(libs.kotlinx.collections.immutable)
-            implementation(project(":library"))
+            implementation(project(":cloudstream:library"))
         }
 
         androidMain.dependencies {
