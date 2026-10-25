@@ -28,7 +28,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build & Test Android APKs
+    name: Build, Sign & Test Android APKs
     runs-on: ubuntu-latest
 
     steps:
@@ -64,12 +64,68 @@ jobs:
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all' }}
         run: ./gradlew assembleRelease --stacktrace
 
-      - name: Upload Release APKs
+      - name: Sign Release APKs
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all' }}
+        run: |
+          set -e
+          RELEASE_DIR="app/build/outputs/apk/release"
+
+          if [ ! -d "$RELEASE_DIR" ]; then
+            echo "Release directory $RELEASE_DIR not found, skipping signing"
+            exit 0
+          fi
+
+          APKSIGNER=$(find $ANDROID_HOME/build-tools -name apksigner | sort -V | tail -n 1)
+          echo "Using apksigner: $APKSIGNER"
+
+          if [ -n "${{ secrets.SIGNING_KEYSTORE }}" ]; then
+            echo "Using repository secret SIGNING_KEYSTORE"
+            echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 -d > signing.keystore
+            KEY_ALIAS="${{ secrets.SIGNING_KEY_ALIAS }}"
+            STORE_PASS="${{ secrets.SIGNING_STORE_PASSWORD }}"
+            KEY_PASS="${{ secrets.KEY_PASSWORD }}"
+          elif [ -f "debug.keystore.base64" ]; then
+            echo "Using bundled debug.keystore.base64 for automatic signing"
+            base64 -d debug.keystore.base64 > signing.keystore
+            KEY_ALIAS="androiddebugkey"
+            STORE_PASS="android"
+            KEY_PASS="android"
+          else
+            echo "Generating fallback debug keystore for signing"
+            keytool -genkey -v -keystore signing.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+            KEY_ALIAS="androiddebugkey"
+            STORE_PASS="android"
+            KEY_PASS="android"
+          fi
+
+          find "$RELEASE_DIR" -name "*unsigned.apk" -type f | while read -r apk; do
+            signed_apk="${apk/-unsigned/}"
+            echo "Signing $apk -> $signed_apk"
+            $APKSIGNER sign \
+              --ks signing.keystore \
+              --ks-key-alias "$KEY_ALIAS" \
+              --ks-pass "pass:$STORE_PASS" \
+              --key-pass "pass:$KEY_PASS" \
+              --v1-signing-enabled true \
+              --v2-signing-enabled true \
+              --v3-signing-enabled true \
+              --out "$signed_apk" \
+              "$apk"
+
+            $APKSIGNER verify --verbose "$signed_apk"
+            rm -f "$apk"
+          done
+
+          rm -f signing.keystore
+          echo "All release APKs successfully signed:"
+          ls -lah "$RELEASE_DIR"
+
+      - name: Upload Signed Release APKs
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all' }}
         uses: actions/upload-artifact@v4
         with:
           name: REX-Player-Release-APKs-${{ env.SHORT_SHA }}
-          path: app/build/outputs/apk/release/*.apk
+          path: app/build/outputs/apk/release/*-release.apk
           if-no-files-found: warn
 
       - name: Upload Debug APKs
@@ -77,5 +133,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: REX-Player-Debug-APKs-${{ env.SHORT_SHA }}
-          path: app/build/outputs/apk/debug/*.apk
+          path: app/build/outputs/apk/debug/*-debug.apk
           if-no-files-found: warn
