@@ -60,6 +60,7 @@ import kotlin.math.roundToInt
 import xyz.mpv.rex.utils.media.MediaFormatter
 import xyz.mpv.rex.preferences.UiSettings
 import xyz.mpv.rex.ui.theme.pillShape
+import xyz.mpv.rex.ui.player.controls.components.liquidGlass
 
 @Composable
 fun VideoCard(
@@ -166,11 +167,19 @@ fun VideoCard(
       // Duration overlay
       Surface(
         shape = pillShape,
-        color = Color.Black.copy(alpha = 0.72f),
+        color = Color.Transparent,
         contentColor = Color.White,
         modifier = Modifier
           .align(Alignment.BottomEnd)
-          .padding(6.dp),
+          .padding(6.dp)
+          .liquidGlass(
+            shape = RoundedCornerShape(16.dp),
+            tintColor = Color.Black.copy(alpha = 0.55f),
+            borderColor = Color.White.copy(alpha = 0.22f),
+            borderWidth = 0.8.dp,
+            specularColor = Color.White.copy(alpha = 0.45f),
+            refraction = 12f
+          ),
       ) {
         Text(
           text = video.durationFormatted,

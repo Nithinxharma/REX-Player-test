@@ -229,11 +229,21 @@ dependencies {
 /* ---------------- Git helpers ---------------- */
 
 fun getCommitCount(): String =
-  providers.exec {
-    commandLine("git", "rev-list", "--count", "HEAD")
-  }.standardOutput.asText.get().trim().ifEmpty { "0" }
+  try {
+    providers.exec {
+      commandLine("git", "rev-list", "--count", "HEAD")
+      isIgnoreExitValue = true
+    }.standardOutput.asText.orNull?.trim()?.ifEmpty { "0" } ?: "0"
+  } catch (_: Exception) {
+    "0"
+  }
 
 fun getCommitSha(): String =
-  providers.exec {
-    commandLine("git", "rev-parse", "--short", "HEAD")
-  }.standardOutput.asText.get().trim().ifEmpty { "unknown" }
+  try {
+    providers.exec {
+      commandLine("git", "rev-parse", "--short", "HEAD")
+      isIgnoreExitValue = true
+    }.standardOutput.asText.orNull?.trim()?.ifEmpty { "unknown" } ?: "unknown"
+  } catch (_: Exception) {
+    "unknown"
+  }

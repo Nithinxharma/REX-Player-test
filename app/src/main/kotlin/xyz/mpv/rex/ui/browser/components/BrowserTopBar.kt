@@ -38,6 +38,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
+import xyz.mpv.rex.ui.player.controls.components.liquidGlass
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -233,11 +234,7 @@ private fun NormalTopBar(
 
   TopAppBar(
     colors = TopAppBarDefaults.topAppBarColors(
-      containerColor = if (MaterialTheme.colorScheme.background == Color.Black) {
-        Color.Black
-      } else {
-        MaterialTheme.colorScheme.surfaceContainer
-      },
+      containerColor = Color.Transparent,
     ),
     title = {
       val titleModifier = Modifier
@@ -418,7 +415,14 @@ private fun NormalTopBar(
         }
       }
     },
-    modifier = modifier,
+    modifier = modifier.liquidGlass(
+      shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp),
+      tintColor = (if (MaterialTheme.colorScheme.background == Color.Black) Color.Black else MaterialTheme.colorScheme.surfaceContainer).copy(alpha = 0.65f),
+      borderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f),
+      borderWidth = 1.dp,
+      specularColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+      refraction = 18f
+    ),
   )
 }
 
@@ -451,23 +455,28 @@ private fun SelectionTopBar(
 
   TopAppBar(
     colors = TopAppBarDefaults.topAppBarColors(
-      containerColor = if (MaterialTheme.colorScheme.background == Color.Black) {
-        Color.Black
-      } else {
-        MaterialTheme.colorScheme.surfaceContainer
-      },
+      containerColor = Color.Transparent,
     ),
     title = {
       Box {
         Surface(
           shape = pillShape,
-          color = MaterialTheme.colorScheme.primaryContainer,
+          color = Color.Transparent,
           contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
           onClick = {
             haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
             showDropdown = true
           },
-          modifier = Modifier.animateContentSize(),
+          modifier = Modifier
+            .animateContentSize()
+            .liquidGlass(
+              shape = pillShape,
+              tintColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.65f),
+              borderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.35f),
+              borderWidth = 1.dp,
+              specularColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+              refraction = 14f
+            ),
         ) {
           Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -703,6 +712,13 @@ private fun SelectionTopBar(
         }
       }
     },
-    modifier = modifier,
+    modifier = modifier.liquidGlass(
+      shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp),
+      tintColor = (if (MaterialTheme.colorScheme.background == Color.Black) Color.Black else MaterialTheme.colorScheme.surfaceContainer).copy(alpha = 0.70f),
+      borderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f),
+      borderWidth = 1.dp,
+      specularColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+      refraction = 18f
+    ),
   )
 }

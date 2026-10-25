@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import xyz.mpv.rex.ui.player.controls.components.liquidGlass
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DriveFileMove
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
@@ -121,15 +122,18 @@ fun BrowserBottomBar(
       modifier = Modifier
         .windowInsetsPadding(WindowInsets.systemBars)
         .padding(horizontal = 20.dp, vertical = 8.dp)
-        .border(
-          width = 1.dp,
-          color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
-          shape = pillShape
+        .liquidGlass(
+          shape = pillShape,
+          tintColor = MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.45f),
+          borderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
+          borderWidth = 1.dp,
+          specularColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+          refraction = 20f
         ),
       shape = pillShape,
-      color = MaterialTheme.colorScheme.surfaceContainerHighest,
-      tonalElevation = 6.dp,
-      shadowElevation = 10.dp
+      color = androidx.compose.ui.graphics.Color.Transparent,
+      tonalElevation = 0.dp,
+      shadowElevation = 0.dp
     ) {
       Row(
         modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),

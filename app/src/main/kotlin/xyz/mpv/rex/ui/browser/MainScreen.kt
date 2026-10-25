@@ -16,8 +16,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import xyz.mpv.rex.ui.player.controls.components.liquidGlass
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -373,8 +376,21 @@ object MainScreen : Screen {
             )
           ) {
             NavigationBar(
-              containerColor = if (isShortsTabActive) Color.Transparent else MaterialTheme.colorScheme.surfaceContainer,
+              modifier = if (!isShortsTabActive) {
+                Modifier
+                  .padding(horizontal = 12.dp, vertical = 6.dp)
+                  .liquidGlass(
+                    shape = RoundedCornerShape(28.dp),
+                    tintColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.50f),
+                    borderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.30f),
+                    borderWidth = 1.dp,
+                    specularColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.45f),
+                    refraction = 20f
+                  )
+              } else Modifier,
+              containerColor = Color.Transparent,
               contentColor = if (isShortsTabActive) Color.White else MaterialTheme.colorScheme.onSurface,
+              tonalElevation = 0.dp,
             ) {
               val itemColors = if (isShortsTabActive) {
                 NavigationBarItemDefaults.colors(

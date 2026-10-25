@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import xyz.mpv.rex.ui.player.controls.components.liquidGlass
 import xyz.mpv.rex.ui.theme.pillShape
 
 /**
@@ -51,9 +52,16 @@ fun MediaMetadataChip(
     shape: Shape = pillShape,
 ) {
     Surface(
-        modifier = modifier,
+        modifier = modifier.liquidGlass(
+            shape = if (shape is RoundedCornerShape) shape else RoundedCornerShape(16.dp),
+            tintColor = color.copy(alpha = 0.35f),
+            borderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f),
+            borderWidth = 0.8.dp,
+            specularColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
+            refraction = 12f
+        ),
         shape = shape,
-        color = color,
+        color = Color.Transparent,
         contentColor = contentColor,
     ) {
         Text(

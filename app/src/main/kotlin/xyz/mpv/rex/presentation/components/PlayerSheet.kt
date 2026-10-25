@@ -32,7 +32,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.shape.ZeroCornerSize
+import xyz.mpv.rex.ui.player.controls.components.liquidGlass
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -167,10 +169,18 @@ fun PlayerSheet(
           ).windowInsetsPadding(
             WindowInsets.systemBars
               .only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal),
-          ).imePadding(),
+          ).imePadding()
+          .liquidGlass(
+            shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp, bottomStart = 0.dp, bottomEnd = 0.dp),
+            tintColor = (surfaceColor ?: MaterialTheme.colorScheme.surfaceContainerLow).copy(alpha = 0.70f),
+            borderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
+            borderWidth = 1.dp,
+            specularColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.45f),
+            refraction = 22f
+          ),
       shape = MaterialTheme.shapes.extraLargeIncreased.copy(bottomEnd = ZeroCornerSize, bottomStart = ZeroCornerSize),
-      color = surfaceColor ?: MaterialTheme.colorScheme.surfaceContainerLow,
-      tonalElevation = tonalElevation,
+      color = Color.Transparent,
+      tonalElevation = 0.dp,
       content = {
         BackHandler(
           enabled = anchoredDraggableState.targetValue == 0,
