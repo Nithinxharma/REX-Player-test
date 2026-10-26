@@ -126,7 +126,7 @@ class ThumbnailRepository(
             val isAudio = video.isAudio || xyz.mpv.rex.utils.storage.FileTypeUtils.isAudioFile(java.io.File(video.path))
 
             val thumbnail = if (forceFirstFrame) {
-              // Direct First-Frame (0.0s) extraction for Shorts Player
+              // Direct First-Frame (0.0s) extraction
               generateWithFastThumbnails(video, diskCacheDimension, targetOffsetsOverride = listOf(0.0))
                 ?: generateWithMediaMetadataRetriever(video, diskCacheDimension, targetOffsetsOverride = listOf(0L))
             } else if (isNetworkUrl(video.path)) {

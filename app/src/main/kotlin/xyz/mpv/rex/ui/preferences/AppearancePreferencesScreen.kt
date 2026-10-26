@@ -346,7 +346,6 @@ object AppearancePreferencesScreen : Screen {
                     }
 
                     item {
-                        val enableShorts by browserPreferences.enableShorts.collectAsState()
                         val enableTabYou by browserPreferences.enableTabYou.collectAsState()
                         val enableTabRecents by browserPreferences.enableTabRecents.collectAsState()
                         val enableTabPlaylists by browserPreferences.enableTabPlaylists.collectAsState()
@@ -359,7 +358,6 @@ object AppearancePreferencesScreen : Screen {
 
                         val visibleTabConfigs = remember(
                             orderedTabIds,
-                            enableShorts,
                             enableTabYou,
                             enableTabRecents,
                             enableTabPlaylists,
@@ -376,16 +374,6 @@ object AppearancePreferencesScreen : Screen {
                                             value = true,
                                             enabled = false,
                                             onValueChange = {}
-                                        )
-                                    )
-                                    "shorts" -> items.add(
-                                        BottomNavTabItem(
-                                            id = "shorts",
-                                            titleRes = R.string.pref_appearance_tab_shorts_title,
-                                            summaryRes = R.string.pref_appearance_tab_shorts_summary,
-                                            value = enableShorts,
-                                            enabled = true,
-                                            onValueChange = { browserPreferences.enableShorts.set(it) }
                                         )
                                     )
                                     "recents" -> if (!enableTabYou) {

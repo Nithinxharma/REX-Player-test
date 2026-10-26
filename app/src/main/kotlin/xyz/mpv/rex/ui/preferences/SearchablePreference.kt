@@ -93,14 +93,6 @@ object SearchablePreferences {
                 targetIndex = 5,
             ))
             add(SearchablePreference(
-                titleRes = R.string.pref_appearance_tab_shorts_title,
-                summaryRes = R.string.pref_appearance_tab_shorts_summary,
-                keywords = listOf("shorts", "tab", "navigation", "bottom bar", "rexshorts"),
-                category = "Appearance",
-                screen = AppearancePreferencesScreen,
-                targetIndex = 5,
-            ))
-            add(SearchablePreference(
                 titleRes = R.string.pref_appearance_tab_you_title,
                 summaryRes = R.string.pref_appearance_tab_you_summary,
                 keywords = listOf("you", "tab", "navigation", "bottom bar", "profile"),
@@ -1269,79 +1261,6 @@ object SearchablePreferences {
                 category = "Advanced",
                 screen = AdvancedPreferencesScreen,
                 targetIndex = 13,
-            ))
-
-            // RexShorts preferences
-            add(SearchablePreference(
-                titleRes = R.string.pref_category_rexshorts_settings,
-                summaryRes = R.string.pref_category_rexshorts_settings_desc,
-                keywords = listOf("shorts", "rexshorts", "tiktok", "reels", "vertical", "video"),
-                category = "RexShorts",
-                screen = ShortsPreferencesScreen,
-                targetIndex = 0,
-            ))
-            add(SearchablePreference(
-                titleRes = R.string.pref_enable_rexshorts,
-                summaryRes = R.string.pref_enable_rexshorts_summary,
-                keywords = listOf("shorts", "rexshorts", "enable", "disable", "tab", "vertical"),
-                category = "RexShorts",
-                screen = ShortsPreferencesScreen,
-                targetIndex = 1,
-            ))
-            add(SearchablePreference(
-                titleRes = R.string.pref_auto_swipe_shorts,
-                summaryRes = R.string.pref_auto_swipe_shorts_summary,
-                keywords = listOf("auto swipe", "loop", "shorts", "rexshorts", "continuous"),
-                category = "RexShorts",
-                screen = ShortsPreferencesScreen,
-                targetIndex = 1,
-            ))
-            add(SearchablePreference(
-                titleRes = R.string.pref_enable_glass_shorts_controls,
-                summaryRes = R.string.pref_enable_glass_shorts_controls_summary,
-                keywords = listOf("glass", "controls", "shorts", "rexshorts", "appearance", "blur"),
-                category = "RexShorts",
-                screen = ShortsPreferencesScreen,
-                targetIndex = 1,
-            ))
-            add(SearchablePreference(
-                titleRes = R.string.pref_show_shorts_back_button,
-                summaryRes = R.string.pref_show_shorts_back_button_summary,
-                keywords = listOf("back button", "navigation", "shorts", "rexshorts", "controls"),
-                category = "RexShorts",
-                screen = ShortsPreferencesScreen,
-                targetIndex = 1,
-            ))
-            add(SearchablePreference(
-                titleRes = R.string.pref_include_short_horizontal_videos,
-                summaryRes = R.string.pref_include_short_horizontal_videos_summary,
-                keywords = listOf("horizontal", "landscape", "short videos", "shorts", "rexshorts"),
-                category = "RexShorts",
-                screen = ShortsPreferencesScreen,
-                targetIndex = 3,
-            ))
-            add(SearchablePreference(
-                titleRes = R.string.pref_max_horizontal_video_duration,
-                keywords = listOf("duration", "max duration", "minutes", "horizontal", "shorts"),
-                category = "RexShorts",
-                screen = ShortsPreferencesScreen,
-                targetIndex = 3,
-            ))
-            add(SearchablePreference(
-                titleRes = R.string.pref_sourced_folders,
-                summaryRes = R.string.pref_sourced_folders_all,
-                keywords = listOf("sourced folders", "folders", "shorts", "source", "select"),
-                category = "RexShorts",
-                screen = ShortsPreferencesScreen,
-                targetIndex = 3,
-            ))
-            add(SearchablePreference(
-                titleRes = R.string.pref_blocked_videos,
-                summaryRes = R.string.pref_blocked_videos_summary,
-                keywords = listOf("blocked", "blacklist", "hide", "shorts", "manage"),
-                category = "RexShorts",
-                screen = ShortsPreferencesScreen,
-                targetIndex = 5,
             ))
 
             // Integrations preferences

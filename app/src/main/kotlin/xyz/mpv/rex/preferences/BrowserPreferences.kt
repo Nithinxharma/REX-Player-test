@@ -150,33 +150,23 @@ class BrowserPreferences(
   val includeNoMediaContent = preferenceStore.getBoolean("include_no_media_content", false)
   val showTreeViewPath = preferenceStore.getBoolean("show_tree_view_path", false)
 
-  // RexShorts preferences
-  val enableShorts = preferenceStore.getBoolean("enable_shorts", true)
-  val autoSwipeShorts = preferenceStore.getBoolean("shorts_auto_swipe", false)
-  val enableGlassShortsControls = preferenceStore.getBoolean("enable_glass_shorts_controls", false)
-  val showShortsBackButton = preferenceStore.getBoolean("show_shorts_back_button", true)
-  val includeShortHorizontalVideos = preferenceStore.getBoolean("shorts_include_horizontal", false)
-  val maxHorizontalVideoDurationMinutes = preferenceStore.getInt("shorts_max_horizontal_minutes", 1)
-  val shortsSourceFolders = preferenceStore.getStringSet("shorts_source_folders", emptySet())
-  val lastWatchedShortPath = preferenceStore.getString("shorts_last_watched_path", "")
-
   // Bottom navigation visibility and ordering preferences
   val enableTabYou = preferenceStore.getBoolean("enable_tab_you", true)
   val enableTabRecents = preferenceStore.getBoolean("enable_tab_recents", true)
   val enableTabPlaylists = preferenceStore.getBoolean("enable_tab_playlists", true)
   val enableTabNetwork = preferenceStore.getBoolean("enable_tab_network", true)
-  val bottomNavOrder = preferenceStore.getString("bottom_nav_order", "home,shorts,recents,playlists,network,you")
+  val bottomNavOrder = preferenceStore.getString("bottom_nav_order", "home,recents,playlists,network,you")
   val playedNetworkLinks = preferenceStore.getString("played_network_links", "")
 
   fun getBottomNavOrder(): List<String> {
-    val defaultOrder = listOf("home", "shorts", "recents", "playlists", "network", "you")
-    val saved = bottomNavOrder.get().split(",").map { it.trim() }.filter { it.isNotEmpty() }
+    val defaultOrder = listOf("home", "recents", "playlists", "network", "you")
+    val saved = bottomNavOrder.get().split(",").map { it.trim() }.filter { it.isNotEmpty() && it != "shorts" }
     val missing = defaultOrder.filterNot { it in saved }
     return saved + missing
   }
 
   fun setBottomNavOrder(order: List<String>) {
-    bottomNavOrder.set(order.joinToString(","))
+    bottomNavOrder.set(order.filter { it != "shorts" }.joinToString(","))
   }
 
   // Auto-playlist preferences

@@ -556,7 +556,7 @@ class HeadlessPlaybackController(private val appContext: Context) : KoinComponen
   }
 
   private fun createOffWindowView(): MPVView {
-    val parser = appContext.resources.getLayout(R.layout.shorts_dummy_layout)
+    val parser = appContext.resources.getLayout(R.layout.headless_dummy_layout)
     var type: Int
     while (parser.next().also { type = it } != XmlPullParser.START_TAG &&
       type != XmlPullParser.END_DOCUMENT

@@ -142,7 +142,6 @@ import xyz.mpv.rex.ui.browser.recentlyplayed.RecentlyPlayedScreen
 import xyz.mpv.rex.ui.browser.recentlyplayed.RecentlyPlayedViewModel
 import xyz.mpv.rex.ui.browser.search.SearchScreen
 import xyz.mpv.rex.ui.browser.sheets.MediaInfoSheet
-import xyz.mpv.rex.ui.browser.shorts.ShortsScreen
 import xyz.mpv.rex.ui.preferences.PreferencesScreen
 import xyz.mpv.rex.ui.utils.LocalBackStack
 import xyz.mpv.rex.utils.media.MediaUtils
@@ -176,7 +175,6 @@ object YouScreen : Screen {
         } else null
       } else null
     }
-    val isShortsEnabled by browserPreferences.enableShorts.collectAsState()
     val enableTabNetwork by browserPreferences.enableTabNetwork.collectAsState()
     val mediaLayoutMode by browserPreferences.mediaLayoutMode.collectAsState()
     val folderGridColumnsPortrait by browserPreferences.folderGridColumnsPortrait.collectAsState()
@@ -286,7 +284,6 @@ object YouScreen : Screen {
               onHistoryClick = { backStack.add(RecentlyPlayedScreen) },
               onPlaylistsClick = { backStack.add(PlaylistScreen) },
               onNetworkClick = if (!enableTabNetwork) { { backStack.add(NetworkStreamingScreen) } } else null,
-              onShortsClick = if (!isShortsEnabled) { { backStack.add(ShortsScreen()) } } else null,
             )
           }
 
@@ -895,7 +892,6 @@ object YouScreen : Screen {
     onHistoryClick: () -> Unit,
     onPlaylistsClick: () -> Unit,
     onNetworkClick: (() -> Unit)? = null,
-    onShortsClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
   ) {
     val haptic = LocalHapticFeedback.current
@@ -1011,16 +1007,6 @@ object YouScreen : Screen {
             onClick = {
               haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
               onNetworkClick()
-            },
-          )
-        }
-        if (onShortsClick != null) {
-          CompactQuickActionChip(
-            icon = Icons.Outlined.VideoLibrary,
-            label = stringResource(R.string.shorts),
-            onClick = {
-              haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-              onShortsClick()
             },
           )
         }

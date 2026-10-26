@@ -93,20 +93,6 @@ class SearchablePreferenceTest {
         // Decoder
         R.string.pref_decoder to "Decoder",
         R.string.pref_decoder_profile_title to "MPV Profile",
-        // RexShorts
-        R.string.pref_category_rexshorts_settings to "RexShorts",
-        R.string.pref_category_rexshorts_settings_desc to "RexShorts and Shorts tab configuration",
-        R.string.pref_enable_rexshorts to "Enable RexShorts",
-        R.string.pref_enable_rexshorts_summary to "Show the Shorts tab in the bottom navigation bar",
-        R.string.pref_auto_swipe_shorts to "Auto swipe RexShorts",
-        R.string.pref_auto_swipe_shorts_summary to "Automatically move to the next short after playback finishes",
-        R.string.pref_enable_glass_shorts_controls to "Enable glass shorts controls",
-        R.string.pref_show_shorts_back_button to "Show back button in shorts player",
-        R.string.pref_include_short_horizontal_videos to "Include horizontal videos",
-        R.string.pref_max_horizontal_video_duration to "Max horizontal video duration",
-        R.string.pref_sourced_folders to "Sourced folders",
-        R.string.pref_blocked_videos to "Blocked videos",
-        R.string.pref_blocked_videos_summary to "Manage hidden or blocked shorts",
         // Advanced & About
         R.string.pref_advanced to "Advanced",
         R.string.pref_about_title to "About",
@@ -140,30 +126,6 @@ class SearchablePreferenceTest {
         assertEquals("Player", firstResult.category)
         assertEquals(PlayerPreferencesScreen, firstResult.screen)
         assertEquals(1, firstResult.targetIndex)
-    }
-
-    @Test
-    fun `searching RexShorts finds shorts preferences`() {
-        val results = SearchablePreferences.search("Shorts", stringResolver)
-        assertFalse(results.isEmpty())
-
-        val foundEnableShorts = results.any { it.titleRes == R.string.pref_enable_rexshorts }
-        val foundAutoSwipe = results.any { it.titleRes == R.string.pref_auto_swipe_shorts }
-        val foundShortsCategory = results.any { it.titleRes == R.string.pref_category_rexshorts_settings }
-
-        assertTrue("Expected pref_enable_rexshorts in results", foundEnableShorts)
-        assertTrue("Expected pref_auto_swipe_shorts in results", foundAutoSwipe)
-        assertTrue("Expected RexShorts category in results", foundShortsCategory)
-    }
-
-    @Test
-    fun `searching Auto swipe finds auto swipe shorts preference`() {
-        val results = SearchablePreferences.search("Auto swipe", stringResolver)
-        assertFalse(results.isEmpty())
-
-        val first = results.first()
-        assertEquals(R.string.pref_auto_swipe_shorts, first.titleRes)
-        assertEquals(ShortsPreferencesScreen, first.screen)
     }
 
     @Test
@@ -335,13 +297,6 @@ class SearchablePreferenceTest {
         assertTrue(
             "Expected auto resume playback in results",
             autoResumeResults.any { it.titleRes == R.string.pref_player_auto_resume_on_ask_title }
-        )
-
-        val rexShortsResults = SearchablePreferences.search("rex-shorts", stringResolver)
-        assertFalse("Expected results for rex-shorts", rexShortsResults.isEmpty())
-        assertTrue(
-            "Expected RexShorts in results",
-            rexShortsResults.any { it.titleRes == R.string.pref_category_rexshorts_settings }
         )
     }
 

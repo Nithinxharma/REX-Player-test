@@ -66,7 +66,6 @@ import xyz.mpv.rex.ui.browser.folderlist.FolderListScreen
 import xyz.mpv.rex.ui.browser.networkstreaming.NetworkStreamingScreen
 import xyz.mpv.rex.ui.browser.playlist.PlaylistScreen
 import xyz.mpv.rex.ui.browser.recentlyplayed.RecentlyPlayedScreen
-import xyz.mpv.rex.ui.browser.shorts.ShortsScreen
 import xyz.mpv.rex.ui.browser.you.YouScreen
 import xyz.mpv.rex.ui.browser.selection.SelectionManager
 import xyz.mpv.rex.ui.browser.miniplayer.MiniPlayer
@@ -178,7 +177,6 @@ object MainScreen : Screen {
     val appearancePreferences = koinInject<AppearancePreferences>()
     val miniPlayerStateManager = koinInject<MiniPlayerStateManager>()
     val miniPlayerState by miniPlayerStateManager.state.collectAsState()
-    val isShortsEnabled by browserPreferences.enableShorts.collectAsState()
     val enableTabYou by browserPreferences.enableTabYou.collectAsState()
     val enableTabRecents by browserPreferences.enableTabRecents.collectAsState()
     val enableTabPlaylists by browserPreferences.enableTabPlaylists.collectAsState()
@@ -200,16 +198,15 @@ object MainScreen : Screen {
     }
 
     val homeLabel = stringResource(R.string.home)
-    val shortsLabel = stringResource(R.string.shorts)
     val youLabel = stringResource(R.string.you)
     val recentsLabel = stringResource(R.string.recents)
     val playlistsLabel = stringResource(R.string.playlists)
     val networkLabel = stringResource(R.string.network)
 
     val visibleTabs = remember(
-      isShortsEnabled, enableTabYou, enableTabRecents, enableTabPlaylists, enableTabNetwork,
+      enableTabYou, enableTabRecents, enableTabPlaylists, enableTabNetwork,
       bottomNavOrder,
-      homeLabel, shortsLabel, youLabel, recentsLabel, playlistsLabel, networkLabel
+      homeLabel, youLabel, recentsLabel, playlistsLabel, networkLabel
     ) {
       val rawTabs = buildList {
         add(
@@ -217,13 +214,6 @@ object MainScreen : Screen {
             FolderListScreen.Content()
           }
         )
-        if (isShortsEnabled) {
-          add(
-            VisibleTab("shorts", shortsLabel, Icons.Outlined.VideoLibrary) {
-              ShortsScreen().Content()
-            }
-          )
-        }
         if (!enableTabYou) {
           if (enableTabRecents) {
             add(
@@ -268,18 +258,6 @@ object MainScreen : Screen {
       if (selectedTab >= visibleTabs.size) {
         selectedTab = 0
       }
-    }
-
-    // Intercept back button when on Shorts tab to return to Home or previous tab
-    val shortsIdx = visibleTabs.indexOfFirst { it.id == "shorts" }
-    val homeIdx = visibleTabs.indexOfFirst { it.id == "home" }
-    androidx.activity.compose.BackHandler(enabled = shortsIdx != -1 && selectedTab == shortsIdx) {
-      val targetTab = when {
-        previousTab != shortsIdx && previousTab in visibleTabs.indices -> previousTab
-        homeIdx != -1 -> homeIdx
-        else -> visibleTabs.indices.firstOrNull { it != shortsIdx } ?: 0
-      }
-      selectedTab = targetTab
     }
 
     // Shared state (across the app) collected reactively via StateFlow
@@ -360,12 +338,8 @@ object MainScreen : Screen {
       modifier = Modifier.fillMaxSize(),
       bottomBar = {
         // Animated bottom navigation bar with slide animations
-        // Also hide if Shorts tab is active (index 1 when enabled, index -1 when disabled)
-        val shortsIdx = visibleTabs.indexOfFirst { it.id == "shorts" }
-        val isShortsTabActive = isShortsEnabled && shortsIdx != -1 && selectedTab == shortsIdx
-        
         AnimatedVisibility(
-            visible = !hideNavigationBar && !isShortsTabActive && visibleTabs.size > 1,
+            visible = !hideNavigationBar && visibleTabs.size > 1,
             enter = slideInVertically(
               animationSpec = tween(durationMillis = 300),
               initialOffsetY = { fullHeight -> fullHeight }
@@ -376,39 +350,27 @@ object MainScreen : Screen {
             )
           ) {
             NavigationBar(
-              modifier = if (!isShortsTabActive) {
-                Modifier
-                  .padding(horizontal = 12.dp, vertical = 6.dp)
-                  .liquidGlass(
-                    shape = RoundedCornerShape(28.dp),
-                    tintColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.50f),
-                    borderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.30f),
-                    borderWidth = 1.dp,
-                    specularColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.45f),
-                    refraction = 20f
-                  )
-              } else Modifier,
+              modifier = Modifier
+                .padding(horizontal = 12.dp, vertical = 6.dp)
+                .liquidGlass(
+                  shape = RoundedCornerShape(28.dp),
+                  tintColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.50f),
+                  borderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.30f),
+                  borderWidth = 1.dp,
+                  specularColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.45f),
+                  refraction = 20f
+                ),
               containerColor = Color.Transparent,
-              contentColor = if (isShortsTabActive) Color.White else MaterialTheme.colorScheme.onSurface,
+              contentColor = MaterialTheme.colorScheme.onSurface,
               tonalElevation = 0.dp,
             ) {
-              val itemColors = if (isShortsTabActive) {
-                NavigationBarItemDefaults.colors(
-                  selectedIconColor = Color.White,
-                  selectedTextColor = Color.White,
-                  unselectedIconColor = Color.White.copy(alpha = 0.7f),
-                  unselectedTextColor = Color.White.copy(alpha = 0.7f),
-                  indicatorColor = Color.White.copy(alpha = 0.2f),
-                )
-              } else {
-                NavigationBarItemDefaults.colors(
-                  selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                  selectedTextColor = MaterialTheme.colorScheme.onSurface,
-                  indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
-                  unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                  unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-              }
+              val itemColors = NavigationBarItemDefaults.colors(
+                selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                selectedTextColor = MaterialTheme.colorScheme.onSurface,
+                indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
+                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+              )
 
               visibleTabs.forEachIndexed { index, tab ->
                 val isYouTabWithCustomAvatar = tab.id == "you" && customAvatarBitmap != null
@@ -510,9 +472,7 @@ object MainScreen : Screen {
           },
           label = "tab_animation"
         ) { targetTab ->
-          val shortsIdx = visibleTabs.indexOfFirst { it.id == "shorts" }
-          val isShortsTabActive = isShortsEnabled && shortsIdx != -1 && selectedTab == shortsIdx
-          val isNavBarVisible = !hideNavigationBar && !isShortsTabActive && visibleTabs.size > 1
+          val isNavBarVisible = !hideNavigationBar && visibleTabs.size > 1
           
           val navBarHeight = if (isNavBarVisible) 80.dp else 0.dp
           val miniPlayerHeight = if (miniPlayerState.isPlaybackActive) MiniPlayerDefaults.CompactHeight else 0.dp
