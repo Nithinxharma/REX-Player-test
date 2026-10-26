@@ -1,4 +1,7 @@
-name: CI/CD Build
+name: CI/CD Build & Sign
+
+permissions:
+  contents: write
 
 on:
   push:
@@ -13,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       build_type:
-        description: 'Build Type (release, debug, all)'
+        description: 'Build Type (all, release, debug)'
         required: false
         default: 'all'
         type: choice
@@ -28,7 +31,7 @@ concurrency:
 
 jobs:
   build:
-    name: Build, Sign & Test Android APKs
+    name: "Build, Sign & Test Android APKs"
     runs-on: ubuntu-latest
 
     steps:
@@ -66,6 +69,11 @@ jobs:
 
       - name: Sign Release APKs
         if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all' }}
+        env:
+          SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
+          SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           set -e
           RELEASE_DIR="app/build/outputs/apk/release"
@@ -75,63 +83,197 @@ jobs:
             exit 0
           fi
 
-          APKSIGNER=$(find $ANDROID_HOME/build-tools -name apksigner | sort -V | tail -n 1)
+          # Locate apksigner with robust fallback
+          APKSIGNER=$(find "$ANDROID_HOME/build-tools" -name apksigner -type f 2>/dev/null | sort -V | tail -n 1)
+          if [ -z "$APKSIGNER" ] || [ ! -x "$APKSIGNER" ]; then
+            if command -v apksigner >/dev/null 2>&1; then
+              APKSIGNER="apksigner"
+            elif [ -f "$ANDROID_HOME/build-tools/35.0.0/apksigner" ]; then
+              APKSIGNER="$ANDROID_HOME/build-tools/35.0.0/apksigner"
+            elif [ -f "$ANDROID_HOME/build-tools/34.0.0/apksigner" ]; then
+              APKSIGNER="$ANDROID_HOME/build-tools/34.0.0/apksigner"
+            else
+              echo "ERROR: apksigner not found"
+              exit 1
+            fi
+          fi
           echo "Using apksigner: $APKSIGNER"
 
-          if [ -n "${{ secrets.SIGNING_KEYSTORE }}" ]; then
+          KEYSTORE_PATH="temp_signing.keystore"
+          rm -f "$KEYSTORE_PATH"
+
+          # Determine keystore source: Secrets -> Bundled base64 -> Generated fallback
+          if [ -n "${SIGNING_KEYSTORE:-}" ]; then
             echo "Using repository secret SIGNING_KEYSTORE"
-            echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 -d > signing.keystore
-            KEY_ALIAS="${{ secrets.SIGNING_KEY_ALIAS }}"
-            STORE_PASS="${{ secrets.SIGNING_STORE_PASSWORD }}"
-            KEY_PASS="${{ secrets.KEY_PASSWORD }}"
+            echo "$SIGNING_KEYSTORE" | base64 -d > "$KEYSTORE_PATH"
+            KEY_ALIAS="${SIGNING_KEY_ALIAS:-androiddebugkey}"
+            STORE_PASS="${SIGNING_STORE_PASSWORD:-android}"
+            KEY_PASS="${KEY_PASSWORD:-$STORE_PASS}"
           elif [ -f "debug.keystore.base64" ]; then
             echo "Using bundled debug.keystore.base64 for automatic signing"
-            base64 -d debug.keystore.base64 > signing.keystore
+            base64 -d debug.keystore.base64 > "$KEYSTORE_PATH"
             KEY_ALIAS="androiddebugkey"
             STORE_PASS="android"
             KEY_PASS="android"
           else
             echo "Generating fallback debug keystore for signing"
-            keytool -genkey -v -keystore signing.keystore -alias androiddebugkey -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+            keytool -genkey -v -keystore "$KEYSTORE_PATH" \
+              -alias androiddebugkey -storepass android -keypass android \
+              -keyalg RSA -keysize 2048 -validity 10000 \
+              -dname "CN=Android Debug,O=Android,C=US"
             KEY_ALIAS="androiddebugkey"
             STORE_PASS="android"
             KEY_PASS="android"
           fi
 
-          find "$RELEASE_DIR" -name "*unsigned.apk" -type f | while read -r apk; do
-            signed_apk="${apk/-unsigned/}"
-            echo "Signing $apk -> $signed_apk"
-            $APKSIGNER sign \
-              --ks signing.keystore \
-              --ks-key-alias "$KEY_ALIAS" \
-              --ks-pass "pass:$STORE_PASS" \
-              --key-pass "pass:$KEY_PASS" \
-              --v1-signing-enabled true \
-              --v2-signing-enabled true \
-              --v3-signing-enabled true \
-              --out "$signed_apk" \
-              "$apk"
+          # Sign all unsigned APKs produced by Gradle splits
+          UNSIGNED_APKS=$(find "$RELEASE_DIR" -name "*unsigned.apk" -type f)
+          if [ -n "$UNSIGNED_APKS" ]; then
+            for apk in $UNSIGNED_APKS; do
+              signed_apk="${apk/-unsigned/}"
+              echo "Signing $apk -> $signed_apk"
+              "$APKSIGNER" sign \
+                --ks "$KEYSTORE_PATH" \
+                --ks-key-alias "$KEY_ALIAS" \
+                --ks-pass "pass:$STORE_PASS" \
+                --key-pass "pass:$KEY_PASS" \
+                --v1-signing-enabled true \
+                --v2-signing-enabled true \
+                --v3-signing-enabled true \
+                --out "$signed_apk" \
+                "$apk"
 
-            $APKSIGNER verify --verbose "$signed_apk"
-            rm -f "$apk"
-          done
+              "$APKSIGNER" verify --verbose "$signed_apk"
+              rm -f "$apk"
+            done
+          else
+            echo "No unsigned APKs found; checking existing release APKs..."
+            for apk in "$RELEASE_DIR"/*-release.apk; do
+              if [ -f "$apk" ]; then
+                "$APKSIGNER" verify --verbose "$apk" || {
+                  echo "Signing $apk..."
+                  "$APKSIGNER" sign \
+                    --ks "$KEYSTORE_PATH" \
+                    --ks-key-alias "$KEY_ALIAS" \
+                    --ks-pass "pass:$STORE_PASS" \
+                    --key-pass "pass:$KEY_PASS" \
+                    --v1-signing-enabled true \
+                    --v2-signing-enabled true \
+                    --v3-signing-enabled true \
+                    --out "$apk" \
+                    "$apk"
+                  "$APKSIGNER" verify --verbose "$apk"
+                }
+              fi
+            done
+          fi
 
-          rm -f signing.keystore
-          echo "All release APKs successfully signed:"
+          rm -f "$KEYSTORE_PATH"
+          echo "Release APK signing completed:"
           ls -lah "$RELEASE_DIR"
 
-      - name: Upload Signed Release APKs
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all' }}
+      - name: Prepare Artifacts & Checksums
+        run: |
+          set -euo pipefail
+          mkdir -p output/release
+          mkdir -p output/debug
+
+          echo "### 🚀 Android Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${SHORT_SHA}\` | **Total Commits:** \`${COMMIT_COUNT}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Process Release APKs if present
+          if [ -d "app/build/outputs/apk/release" ]; then
+            echo "#### 📦 Signed Release APKs" >> $GITHUB_STEP_SUMMARY
+            echo "| Architecture | File Name | Size | SHA-256 Checksum |" >> $GITHUB_STEP_SUMMARY
+            echo "| :--- | :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
+
+            apks=("universal" "arm64-v8a" "armeabi-v7a" "x86" "x86_64")
+            for abi in "${apks[@]}"; do
+              src="app/build/outputs/apk/release/app-${abi}-release.apk"
+              dst_name="REX-Player-${abi}-${SHORT_SHA}.apk"
+              dst="output/release/${dst_name}"
+              if [ -f "$src" ]; then
+                cp "$src" "$dst"
+                checksum=$(sha256sum "$dst" | awk '{print $1}')
+                size=$(du -h "$dst" | cut -f1)
+                echo "$checksum  $dst_name" >> output/release/checksums.txt
+                echo "| \`${abi}\` | \`${dst_name}\` | ${size} | \`${checksum}\` |" >> $GITHUB_STEP_SUMMARY
+              fi
+            done
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Process Debug APKs if present
+          if [ -d "app/build/outputs/apk/debug" ]; then
+            echo "#### 🛠️ Debug APKs" >> $GITHUB_STEP_SUMMARY
+            echo "| Variant | File Name | Size |" >> $GITHUB_STEP_SUMMARY
+            echo "| :--- | :--- | :--- |" >> $GITHUB_STEP_SUMMARY
+            for apk in app/build/outputs/apk/debug/*.apk; do
+              if [ -f "$apk" ]; then
+                fname=$(basename "$apk")
+                dst_name="${fname%.apk}-${SHORT_SHA}.apk"
+                dst="output/debug/${dst_name}"
+                cp "$apk" "$dst"
+                size=$(du -h "$dst" | cut -f1)
+                echo "| Debug | \`${dst_name}\` | ${size} |" >> $GITHUB_STEP_SUMMARY
+              fi
+            done
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload Consolidated Signed Release Package
+        if: ${{ (github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all') && hashFiles('output/release/*.apk') != '' }}
         uses: actions/upload-artifact@v4
         with:
-          name: REX-Player-Release-APKs-${{ env.SHORT_SHA }}
-          path: app/build/outputs/apk/release/*-release.apk
+          name: REX-Player-Release-All-${{ env.SHORT_SHA }}
+          path: output/release/
           if-no-files-found: warn
 
-      - name: Upload Debug APKs
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_type == 'debug' || inputs.build_type == 'all' }}
+      - name: Upload arm64-v8a Release APK
+        if: ${{ (github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all') && hashFiles('output/release/REX-Player-arm64-v8a-*.apk') != '' }}
         uses: actions/upload-artifact@v4
         with:
-          name: REX-Player-Debug-APKs-${{ env.SHORT_SHA }}
-          path: app/build/outputs/apk/debug/*-debug.apk
+          name: REX-Player-arm64-v8a-signed-${{ env.SHORT_SHA }}
+          path: output/release/REX-Player-arm64-v8a-${{ env.SHORT_SHA }}.apk
+          if-no-files-found: ignore
+
+      - name: Upload armeabi-v7a Release APK
+        if: ${{ (github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all') && hashFiles('output/release/REX-Player-armeabi-v7a-*.apk') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: REX-Player-armeabi-v7a-signed-${{ env.SHORT_SHA }}
+          path: output/release/REX-Player-armeabi-v7a-${{ env.SHORT_SHA }}.apk
+          if-no-files-found: ignore
+
+      - name: Upload universal Release APK
+        if: ${{ (github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all') && hashFiles('output/release/REX-Player-universal-*.apk') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: REX-Player-universal-signed-${{ env.SHORT_SHA }}
+          path: output/release/REX-Player-universal-${{ env.SHORT_SHA }}.apk
+          if-no-files-found: ignore
+
+      - name: Upload x86 Release APK
+        if: ${{ (github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all') && hashFiles('output/release/REX-Player-x86-*.apk') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: REX-Player-x86-signed-${{ env.SHORT_SHA }}
+          path: output/release/REX-Player-x86-${{ env.SHORT_SHA }}.apk
+          if-no-files-found: ignore
+
+      - name: Upload x86_64 Release APK
+        if: ${{ (github.event_name != 'workflow_dispatch' || inputs.build_type == 'release' || inputs.build_type == 'all') && hashFiles('output/release/REX-Player-x86_64-*.apk') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: REX-Player-x86_64-signed-${{ env.SHORT_SHA }}
+          path: output/release/REX-Player-x86_64-${{ env.SHORT_SHA }}.apk
+          if-no-files-found: ignore
+
+      - name: Upload Debug APKs
+        if: ${{ (github.event_name != 'workflow_dispatch' || inputs.build_type == 'debug' || inputs.build_type == 'all') && hashFiles('output/debug/*.apk') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: REX-Player-Debug-${{ env.SHORT_SHA }}
+          path: output/debug/
           if-no-files-found: warn
