@@ -22,6 +22,7 @@ import androidx.compose.material.icons.automirrored.outlined.ViewQuilt
 import androidx.compose.material.icons.outlined.Audiotrack
 import androidx.compose.material.icons.outlined.CloudDownload
 import androidx.compose.material.icons.outlined.Code
+import androidx.compose.material.icons.outlined.Extension
 import androidx.compose.material.icons.outlined.Gesture
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Memory
@@ -242,11 +243,18 @@ object PreferencesScreen : Screen {
                   onClick = { backstack.add(xyz.mpv.rex.jellyfin.ui.JellyfinSettingsScreen) },
                 )
                 PreferenceItem(
-                  position = GroupPosition.LAST,
+                  position = GroupPosition.MIDDLE,
                   title = "yt-dlp",
                   summary = "Manage REX Ytdlp & extractor preferences",
                   icon = Icons.Outlined.CloudDownload,
                   onClick = { backstack.add(YtdlSettingsScreen) },
+                )
+                PreferenceItem(
+                  position = GroupPosition.LAST,
+                  title = stringResource(R.string.pref_cscore_title),
+                  summary = stringResource(R.string.pref_cscore_summary),
+                  icon = Icons.Outlined.Extension,
+                  onClick = { backstack.add(CSCorePreferencesScreen) },
                 )
               }
             }

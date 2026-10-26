@@ -1435,6 +1435,48 @@ object SearchablePreferences {
                 screen = AboutScreen,
                 targetIndex = 0,
             ))
+
+            // CloudStream Core (CSCore)
+            add(SearchablePreference(
+                titleRes = R.string.pref_cscore_title,
+                summaryRes = R.string.pref_cscore_summary,
+                keywords = listOf("cscore", "cloudstream", "plugins", "extensions", "providers", "repositories", "integrations"),
+                category = "Integrations",
+                screen = CSCorePreferencesScreen,
+                targetIndex = 0,
+            ))
+            add(SearchablePreference(
+                titleRes = R.string.cscore_repositories_title,
+                summaryRes = R.string.cscore_repositories_summary,
+                keywords = listOf("repository", "repo", "megarepo", "plugins", "extensions", "cscore"),
+                category = "CSCore",
+                screen = CSCorePreferencesScreen,
+                targetIndex = 1,
+            ))
+            add(SearchablePreference(
+                titleRes = R.string.cscore_dns_title,
+                summaryRes = R.string.cscore_dns_summary,
+                keywords = listOf("dns", "doh", "dns-over-https", "cloudflare", "google", "adguard", "network", "cscore"),
+                category = "CSCore",
+                screen = CSCorePreferencesScreen,
+                targetIndex = 3,
+            ))
+            add(SearchablePreference(
+                titleRes = R.string.cscore_preferred_media_title,
+                summaryRes = R.string.cscore_preferred_media_summary,
+                keywords = listOf("media types", "movies", "anime", "tv", "providers", "filter", "cscore"),
+                category = "CSCore",
+                screen = CSCorePreferencesScreen,
+                targetIndex = 2,
+            ))
+            add(SearchablePreference(
+                titleRes = R.string.cscore_trackers_title,
+                summaryRes = R.string.cscore_trackers_summary,
+                keywords = listOf("trackers", "anilist", "myanimelist", "mal", "kitsu", "simkl", "animeskip", "sync", "accounts"),
+                category = "CSCore",
+                screen = CSCorePreferencesScreen,
+                targetIndex = 4,
+            ))
         }
     }
 

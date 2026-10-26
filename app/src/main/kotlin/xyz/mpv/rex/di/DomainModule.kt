@@ -29,6 +29,7 @@ val domainModule = module {
     single { xyz.mpv.rex.jellyfin.api.JellyfinApi(get(), get(), get()) }
     single { xyz.mpv.rex.jellyfin.remote.JellyfinRemoteClient(get(), get(), get(), androidContext()) }
     single { xyz.mpv.rex.domain.ytdl.YtDlClient(androidContext(), get()) }
+    single { xyz.mpv.rex.cloudstream.CloudStreamPluginCoordinator(androidContext()) }
 }
 
 

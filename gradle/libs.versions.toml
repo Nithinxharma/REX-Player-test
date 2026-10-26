@@ -23,23 +23,30 @@ kotlinx-coroutines-test = "1.10.1"
 turbine = "1.2.0"
 
 # CloudStream core versions
+activity = "1.12.4"
 annotation = "1.10.0"
+coil = "3.3.0"
+composeMaterial3 = "1.12.0-alpha03"
+composeMultiplatform = "1.12.0"
 cryptography = "0.6.0"
 jacksonModuleKotlin = { strictly = "2.13.1" } # Later versions don't support minSdk <26 (Crashes on Android TV's and FireSticks)
 jsoup = "1.22.1"
 kotlinGradlePlugin = "2.4.0"
 kotlinxAtomicfu = "0.33.0"
+kotlinxCollectionsImmutable = "0.5.2"
 kotlinxCoroutines = "1.11.0"
 kotlinxDatetime = "0.8.0"
 kotlinxIOCore = "0.9.1"
 kotlinxSerializationJson = "1.11.0"
 ksoup = "0.2.6"
 ktor = "3.5.0"
+lifecycleViewmodelCompose = "2.10.0"
 newpipeextractor = "v0.26.3"
 nicehttp = "0.4.18"
+preferenceKtx = "1.2.1"
 rhino = { strictly = "1.8.1" } # Requires minSdk 26 or later beginning at version 1.9.0
 jvmTarget = "11"
-minSdk = "23"
+minSdk = "26"
 compileSdk = "37"
 targetSdk = "36"
 
@@ -134,23 +141,26 @@ compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version =
 compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version = { ref = "composeMultiplatform" } }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version = { ref = "coil" } }
 
-# CloudStream shared Compose bundle
-compose = ["compose-foundation", "compose-material3", "compose-resources", "compose-runtime", "compose-ui", "compose-ui-tooling", "compose-ui-tooling-preview", "lifecycle-viewmodel-compose", "coil-compose"]
+lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
 [bundles]
 koin = ["koin-core", "koin-android", "koin-compose", "koin-viewmodel"]
 compose-navigation3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui"]
+cryptography = ["cryptography-core", "cryptography-provider-optimal"]
+compose = ["compose-foundation", "compose-material3", "compose-resources", "compose-runtime", "compose-ui", "compose-ui-tooling", "compose-ui-tooling-preview", "lifecycle-viewmodel-compose", "coil-compose"]
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version = "2.3.9" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 room = { id = "androidx.room", version.ref = "room" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 android-lint = { id = "com.android.lint", version.ref = "agp" }
 android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version = "0.21.2" }
 dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-compose-multiplatform = { id = "org.jetbrains.compose", version = "1.12.0" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }

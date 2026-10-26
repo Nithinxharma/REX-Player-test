@@ -11,7 +11,8 @@ plugins {
 
 android {
   namespace = "xyz.mpv.rex"
-  compileSdk = 36
+  compileSdk = 37
+  compileSdkMinor = 0
 
   defaultConfig {
     applicationId = "xyz.mpv.rex"
@@ -218,6 +219,10 @@ dependencies {
   implementation(libs.lazycolumnscrollbar)
   implementation(libs.reorderable)
   implementation(libs.compose.markdown)
+
+  // CloudStream Core integration
+  implementation(project(":cloudstream:library"))
+  implementation(project(":cloudstream:shared"))
 
   // Unit Testing
   testImplementation(libs.junit)

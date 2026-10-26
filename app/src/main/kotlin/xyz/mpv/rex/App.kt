@@ -37,6 +37,7 @@ class App : Application() {
   private val metadataCache: VideoMetadataCacheRepository by inject()
   private val hybridMediaIndex: HybridMediaIndexRepository by inject()
   private val advancedPreferences: xyz.mpv.rex.preferences.AdvancedPreferences by inject()
+  private val cloudStreamPluginCoordinator: xyz.mpv.rex.cloudstream.CloudStreamPluginCoordinator by inject()
   private val mediaStoreInvalidations = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
   private val rootInvalidations = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
@@ -46,6 +47,9 @@ class App : Application() {
 
   override fun onCreate() {
     super.onCreate()
+
+    // Initialize CloudStream Core context for WebView resolvers and provider runtime
+    com.lagradost.api.setContext(this)
 
     // Initialize Koin
     startKoin {
@@ -89,6 +93,13 @@ class App : Application() {
     applicationScope.launch {
       runCatching {
         metadataCache.performMaintenance()
+      }
+    }
+
+    // Initialize CloudStream plugin discovery asynchronously
+    applicationScope.launch {
+      runCatching {
+        cloudStreamPluginCoordinator.initialize()
       }
     }
   }

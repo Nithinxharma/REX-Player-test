@@ -1519,4 +1519,75 @@
     <string name="web_share_step_2">Scan QR code or type URL in any browser</string>
     <string name="web_share_stop_sharing">Stop Sharing</string>
 
+    <!-- CloudStream Core (CSCore) Preferences -->
+    <string name="pref_category_cscore">CloudStream Core</string>
+    <string name="pref_cscore_title">CSCore</string>
+    <string name="pref_cscore_summary">Extensions, repositories, network &amp; tracker integrations</string>
+
+    <string name="cscore_category_repositories">Repositories &amp; Extensions</string>
+    <string name="cscore_auto_update_plugins_title">Auto-update plugins</string>
+    <string name="cscore_auto_update_plugins_summary">Automatically check and update installed extensions</string>
+    <string name="cscore_auto_download_title">Auto-download mode</string>
+    <string name="cscore_auto_download_summary">Policy for downloading new repository plugins</string>
+    <string name="cscore_auto_download_off">Disabled</string>
+    <string name="cscore_auto_download_always">Always</string>
+    <string name="cscore_auto_download_wifi">Only on Wi-Fi</string>
+    <string name="cscore_repositories_title">Manage Repositories</string>
+    <string name="cscore_repositories_summary">%1$d active plugin repositories</string>
+    <string name="cscore_add_repository">Add Repository</string>
+    <string name="cscore_repo_name_hint">Repository Name</string>
+    <string name="cscore_repo_url_hint">Repository URL (raw JSON)</string>
+    <string name="cscore_plugin_dir_title">Plugin Storage Directory</string>
+    <string name="cscore_reload_plugins_title">Reload &amp; Re-index Plugins</string>
+    <string name="cscore_reload_plugins_summary">Rescan storage and refresh provider registrations</string>
+
+    <string name="cscore_category_content">Content &amp; Providers</string>
+    <string name="cscore_provider_langs_title">Provider Languages</string>
+    <string name="cscore_provider_langs_summary">Filter providers by language (Universal / All enabled by default)</string>
+    <string name="cscore_preferred_media_title">Preferred Media Types</string>
+    <string name="cscore_preferred_media_summary">Movies, TV Series, Anime, Documentaries</string>
+    <string name="cscore_dub_sub_title">Dub / Sub Preference</string>
+    <string name="cscore_dub_sub_summary">Filter release streams by audio and subtitle type</string>
+    <string name="cscore_nsfw_title">Adult / NSFW Content</string>
+    <string name="cscore_nsfw_summary">Allow providers and search results with 18+ content</string>
+
+    <string name="cscore_category_network">Network &amp; Extraction</string>
+    <string name="cscore_dns_title">DNS-over-HTTPS (DoH)</string>
+    <string name="cscore_dns_summary">Bypass ISP filtering and domain censorship</string>
+    <string name="cscore_dns_default">System Default</string>
+    <string name="cscore_dns_google">Google DNS (8.8.8.8)</string>
+    <string name="cscore_dns_cloudflare">Cloudflare DNS (1.1.1.1)</string>
+    <string name="cscore_dns_adguard">AdGuard DNS</string>
+    <string name="cscore_dns_quad9">Quad9 DNS (9.9.9.9)</string>
+    <string name="cscore_dns_dnssb">DNS.SB</string>
+    <string name="cscore_jsdelivr_proxy_title">jsDelivr Proxy</string>
+    <string name="cscore_jsdelivr_proxy_summary">Proxy GitHub manifests and assets via jsDelivr CDN</string>
+    <string name="cscore_parallel_downloads_title">Parallel Downloads</string>
+    <string name="cscore_parallel_downloads_summary">Maximum concurrent download tasks: %1$d</string>
+    <string name="cscore_concurrent_connections_title">Connection Concurrency</string>
+    <string name="cscore_concurrent_connections_summary">Maximum simultaneous network sockets: %1$d</string>
+
+    <string name="cscore_category_accounts">Sync &amp; Tracker Accounts</string>
+    <string name="cscore_subtitles_accounts_title">Subtitle Providers</string>
+    <string name="cscore_subtitles_accounts_summary">OpenSubtitles &amp; SubDL integrations</string>
+    <string name="cscore_opensubtitles_title">OpenSubtitles Credentials</string>
+    <string name="cscore_opensubtitles_summary">Account for automated subtitle search and retrieval</string>
+    <string name="cscore_opensubtitles_user_hint">Username</string>
+    <string name="cscore_opensubtitles_pass_hint">Password</string>
+    <string name="cscore_subdl_connected">Connected via REX Subtitle Preferences</string>
+    <string name="cscore_trackers_title">Metadata &amp; Progress Trackers</string>
+    <string name="cscore_trackers_summary">AniList, MyAnimeList, Kitsu, Simkl, AnimeSkip</string>
+    <string name="cscore_anilist_title">AniList</string>
+    <string name="cscore_mal_title">MyAnimeList (MAL)</string>
+    <string name="cscore_kitsu_title">Kitsu</string>
+    <string name="cscore_simkl_title">Simkl</string>
+    <string name="cscore_animeskip_title">AnimeSkip (Timestamp skipping)</string>
+    <string name="cscore_token_hint">Access Token / API Key</string>
+
+    <string name="cscore_category_diagnostics">Diagnostics &amp; Status</string>
+    <string name="cscore_diag_status_title">Subsystem Health</string>
+    <string name="cscore_diag_status_summary">%1$d plugins loaded, %2$d providers registered</string>
+    <string name="cscore_diag_logcat_title">Core Diagnostics Log</string>
+    <string name="cscore_diag_logcat_summary">View recent CloudStream core runtime logs</string>
+
 </resources>
