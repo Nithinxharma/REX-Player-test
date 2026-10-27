@@ -77,4 +77,101 @@
     <string name="generic_ok">OK</string>
     <string name="generic_cancel">Cancel</string>
     <string name="generic_confirm">Confirm</string>
+
+    <!-- Player Button Labels -->
+    <string name="btn_label_back">Back</string>
+    <string name="btn_label_title">Title</string>
+    <string name="btn_label_bookmarks">Bookmarks</string>
+    <string name="btn_label_speed">Speed</string>
+    <string name="btn_label_decoder">Decoder</string>
+    <string name="btn_label_rotation">Rotation</string>
+    <string name="btn_label_frame_nav">Frame Nav</string>
+    <string name="btn_label_zoom">Zoom</string>
+    <string name="btn_label_pip">PiP</string>
+    <string name="btn_label_aspect">Aspect</string>
+    <string name="btn_label_lock">Lock</string>
+    <string name="btn_label_audio">Audio</string>
+    <string name="btn_label_subtitles">Subtitles</string>
+    <string name="btn_label_more">More</string>
+    <string name="btn_label_chapter">Chapter</string>
+    <string name="btn_label_repeat_mode">Repeat</string>
+    <string name="btn_label_shuffle">Shuffle</string>
+    <string name="btn_label_mirror">Mirror</string>
+    <string name="btn_label_vertical_flip">Flip Vertical</string>
+    <string name="btn_label_ab_loop">A-B Loop</string>
+    <string name="btn_label_custom_skip">Skip</string>
+    <string name="btn_label_background_playback">Background Playback</string>
+    <string name="btn_label_ambient_mode">Ambient Mode</string>
+    <string name="btn_label_sleep_timer">Sleep Timer</string>
+    <string name="btn_label_quality">Quality</string>
+    <string name="btn_label_none">None</string>
+
+    <!-- Web Share Strings -->
+    <string name="web_share_title">Web Share</string>
+    <string name="web_share_file">Sharing file</string>
+    <string name="web_share_files">Sharing %1$d files</string>
+    <string name="web_share_qr_desc">Scan QR code to access shared media on any device</string>
+    <string name="web_share_enable_notifications_title">Notifications</string>
+    <string name="web_share_enable_notifications_desc">Notify when devices connect to share server</string>
+    <string name="web_share_allow">Allow</string>
+    <string name="web_share_require_token_title">Security Token</string>
+    <string name="web_share_require_token_enabled_desc">Token security enabled</string>
+    <string name="web_share_require_token_disabled_desc">Token security disabled</string>
+    <string name="web_share_received_title">Received File</string>
+    <string name="web_share_received_path">Saved to: %1$s</string>
+    <string name="web_share_link_copied">Link copied to clipboard</string>
+    <string name="web_share_copy_link">Copy Link</string>
+    <string name="web_share_no_network">No active network connection</string>
+    <string name="web_share_step_1">Connect device to same local network</string>
+    <string name="web_share_step_2">Open link or scan QR code in browser</string>
+    <string name="web_share_stop_sharing">Stop Sharing</string>
+
+    <!-- Sort & Layout -->
+    <string name="sort_order_ascending">Ascending</string>
+    <string name="sort_order_descending">Descending</string>
+    <string name="sort_type_title">Title</string>
+    <string name="sort_type_duration">Duration</string>
+    <string name="sort_type_date">Date</string>
+    <string name="sort_type_size">Size</string>
+    <string name="sort_type_count">Count</string>
+    <string name="view_mode_folder">Folder View</string>
+    <string name="view_mode_tree">Tree View</string>
+    <string name="view_mode_library">Library View</string>
+    <string name="layout_mode_list">List Layout</string>
+    <string name="layout_mode_grid">Grid Layout</string>
+
+    <!-- Audio & Anime4K -->
+    <string name="pref_audio_channels_auto">Auto</string>
+    <string name="pref_audio_channels_auto_safe">Auto (Safe)</string>
+    <string name="pref_audio_channels_mono">Mono</string>
+    <string name="pref_audio_channels_stereo">Stereo</string>
+    <string name="pref_audio_channels_stereo_reversed">Stereo (Reversed)</string>
+
+    <string name="anime4k_quality_fast">Fast</string>
+    <string name="anime4k_quality_balanced">Balanced</string>
+    <string name="anime4k_quality_high">High</string>
+    <string name="anime4k_mode_off">Off</string>
+    <string name="anime4k_mode_a">Mode A</string>
+    <string name="anime4k_mode_b">Mode B</string>
+    <string name="anime4k_mode_c">Mode C</string>
+    <string name="anime4k_mode_a_plus">Mode A+</string>
+    <string name="anime4k_mode_b_plus">Mode B+</string>
+    <string name="anime4k_mode_c_plus">Mode C+</string>
+
+    <string name="numeric_chooser_value_too_big">Value is too large</string>
+    <string name="numeric_chooser_value_too_small">Value is too small</string>
+
+    <!-- Update Feature -->
+    <string name="update_ready_to_install">Update ready to install</string>
+    <string name="update_available_title">New Version Available</string>
+    <string name="update_current_version">Current version: %1$s</string>
+    <string name="update_latest_version">Latest version: %1$s</string>
+    <string name="update_release_date">Release date: %1$s</string>
+    <string name="update_size">Size: %1$s</string>
+    <string name="update_release_notes">Release notes:</string>
+    <string name="update_downloading">Downloading update… %1$d%%</string>
+    <string name="update_install">Install</string>
+    <string name="update_download">Download</string>
+    <string name="update_ignore">Ignore</string>
+    <string name="update_cancel">Cancel</string>
 </resources>

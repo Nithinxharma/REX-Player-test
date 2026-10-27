@@ -18,3 +18,6 @@ actual fun runOnMainThreadNative(@MainThread work: () -> Unit) {
         Handler(mainLooper).post(work)
     }
 }
+
+actual val workerDispatcher: kotlinx.coroutines.CoroutineDispatcher = kotlinx.coroutines.Dispatchers.IO
+actual typealias WorkerThread = androidx.annotation.WorkerThread

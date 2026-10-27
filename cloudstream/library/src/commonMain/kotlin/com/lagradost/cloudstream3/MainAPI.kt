@@ -1,6 +1,8 @@
 package com.lagradost.cloudstream3
 
+import com.lagradost.cloudstream3.utils.ExtractorLink
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.ConcurrentHashMap
 
@@ -12,17 +14,27 @@ enum class DubStatus {
     None, Dubbed, Subbed
 }
 
+enum class SearchQuality {
+    BlueRay, Cam, CamRip, DVD, FourK, HD, HDR, HQ, HdCam, SD, SDR, Telecine, Telesync, UHD, WebRip, WorkPrint
+}
+
 @Serializable
 open class MainAPI {
-    open var name: String = ""
-    open var mainUrl: String = ""
-    open var lang: String = "en"
-    open var hasMainPage: Boolean = false
-    open var canBeOverridden: Boolean = true
-    open var providerType: ProviderType = ProviderType.OTHER
-    open var supportedTypes: Set<TvType> = setOf(TvType.Movie, TvType.TvSeries)
+    open val name: String = ""
+    open val mainUrl: String = ""
+    open val lang: String = "en"
+    open val hasMainPage: Boolean = false
+    open val canBeOverridden: Boolean = true
+    open val providerType: ProviderType = ProviderType.OTHER
+    open val supportedTypes: Set<TvType> = setOf(TvType.Movie, TvType.TvSeries)
+    open val mainPage: List<MainPageRequest> = emptyList()
+    open val usesWebView: Boolean = false
+    @Transient open val supportedSyncNames: Set<Any> = emptySet()
 
-    open suspend fun getMainPage(page: Int = 1, request: MainPageRequest? = null): HomePageResponse? {
+    open suspend fun getLoadUrl(name: Any, id: String): String? = null
+    open suspend fun getLoadUrl(name: String, id: String): String? = null
+
+    open suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse? {
         return null
     }
 
@@ -30,8 +42,21 @@ open class MainAPI {
         return null
     }
 
+    open suspend fun search(query: String, page: Int): SearchResponseList? {
+        return null
+    }
+
     open suspend fun load(url: String): LoadResponse? {
         return null
+    }
+
+    open suspend fun loadLinks(
+        data: String,
+        isCasting: Boolean = false,
+        subtitleCallback: (SubtitleFile) -> Unit = {},
+        callback: (ExtractorLink) -> Unit = {}
+    ): Boolean {
+        return false
     }
 
     companion object {
@@ -40,7 +65,7 @@ open class MainAPI {
 }
 
 enum class ProviderType {
-    ANIME, MOVIE, TV_SERIES, ASIAN_DRAMA, CARTOON, DOCUMENTARY, LIVE, MUSIC, OTHER
+    ANIME, MOVIE, TV_SERIES, ASIAN_DRAMA, CARTOON, DOCUMENTARY, LIVE, MUSIC, MetaProvider, OTHER
 }
 
 @Serializable
@@ -56,6 +81,7 @@ open class SearchResponse(
     open var type: TvType? = null,
     open var posterUrl: String? = null,
     open var year: Int? = null,
+    open var id: Int? = null
 )
 
 @Serializable
@@ -84,9 +110,36 @@ open class LoadResponse(
     open var posterUrl: String? = null,
     open var plot: String? = null,
     open var year: Int? = null,
-)
+    open var showStatus: ShowStatus? = null,
+    open var score: Score? = null,
+    open var tags: List<String>? = null,
+    open var duration: Int? = null,
+    open var recommendations: List<SearchResponse>? = null,
+    open var actors: List<ActorData>? = null,
+    open var comingSoon: Boolean = false,
+    open var backgroundPosterUrl: String? = null,
+    open var contentRating: String? = null,
+    open var nextAiring: NextAiring? = null,
+    open var logoUrl: String? = null,
+    open var uniqueUrl: String? = null
+) {
+    companion object {
+        fun LoadResponse.addTrailer(url: String?) {}
+        fun LoadResponse.addTrailer(urls: List<String>?) {}
+        fun LoadResponse.addTrailer(url: String?, addRaw: Boolean = false, headers: Map<String, String>? = null) {}
+        fun LoadResponse.addImdbId(id: String?) {}
+        fun LoadResponse.addTMDbId(id: String?) {}
+        fun LoadResponse.addActors(actors: List<ActorData>?) {}
+        @JvmName("addActorsPairs")
+        fun LoadResponse.addActors(actors: List<Pair<Actor, String?>>?) {}
+        fun LoadResponse.addDate(date: String?, format: String? = null) {}
+        fun LoadResponse.addDate(date: Long?) {}
+    }
+}
 
 object APIHolder {
+    suspend fun getCaptchaToken(url: String, key: String? = null, referer: String? = null): String? = null
+    val unixTimeMS: Long get() = System.currentTimeMillis()
     val allProviders = CopyOnWriteArrayList<MainAPI>()
     var apis: List<MainAPI> = emptyList()
     var apiMap: ConcurrentHashMap<String, MainAPI>? = null

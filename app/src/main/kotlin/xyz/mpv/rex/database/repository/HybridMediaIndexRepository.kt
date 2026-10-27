@@ -19,6 +19,7 @@ import xyz.mpv.rex.domain.media.model.MediaFolder
 import xyz.mpv.rex.domain.media.model.Video
 import xyz.mpv.rex.preferences.BrowserPreferences
 import xyz.mpv.rex.preferences.FoldersPreferences
+import xyz.mpv.rex.preferences.preference.Preference
 import xyz.mpv.rex.utils.media.MediaFormatter
 import xyz.mpv.rex.utils.storage.FileFilterUtils
 import xyz.mpv.rex.utils.storage.FileTypeUtils

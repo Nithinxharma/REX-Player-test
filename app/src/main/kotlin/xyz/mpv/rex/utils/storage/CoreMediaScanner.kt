@@ -6,6 +6,7 @@ import android.util.Log
 import xyz.mpv.rex.database.entities.PlaybackStateEntity
 import xyz.mpv.rex.domain.media.model.MediaFolder
 import xyz.mpv.rex.preferences.BrowserPreferences
+import xyz.mpv.rex.preferences.preference.Preference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive

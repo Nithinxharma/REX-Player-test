@@ -503,8 +503,7 @@ object MainScreen : Screen {
   }
 }
 
-// CompositionLocal for navigation bar height
-val LocalNavigationBarHeight = compositionLocalOf { 0.dp }
+// CompositionLocal for navigation bar height is defined in LocalNavigationBarHeight.kt
 
 private data class VisibleTab(
   val id: String,

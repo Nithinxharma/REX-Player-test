@@ -15,6 +15,7 @@ import kotlin.reflect.KClass
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 object AppUtils {
+    suspend fun getCaptchaToken(url: String, key: String? = null, referer: String? = null): String? = null
     /** Any object as a JSON string */
     fun Any.toJson(): String {
         if (this is String) return this

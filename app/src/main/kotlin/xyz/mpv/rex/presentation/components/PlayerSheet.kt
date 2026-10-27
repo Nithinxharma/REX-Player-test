@@ -68,7 +68,6 @@ import kotlin.math.roundToInt
 
 private val sheetAnimationSpec = tween<Float>(350)
 
-@OptIn(androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class)
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun PlayerSheet(

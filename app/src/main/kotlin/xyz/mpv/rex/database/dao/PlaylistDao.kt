@@ -12,92 +12,92 @@ import xyz.mpv.rex.database.entities.PlaylistItemEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface PlaylistDao {
+abstract class PlaylistDao {
   // Playlist operations
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun insertPlaylist(playlist: PlaylistEntity): Long
+  abstract suspend fun insertPlaylist(playlist: PlaylistEntity): Long
 
   @Update
-  suspend fun updatePlaylist(playlist: PlaylistEntity)
+  abstract suspend fun updatePlaylist(playlist: PlaylistEntity)
 
   @Delete
-  suspend fun deletePlaylist(playlist: PlaylistEntity)
+  abstract suspend fun deletePlaylist(playlist: PlaylistEntity)
 
   @Query("SELECT * FROM PlaylistEntity ORDER BY updatedAt DESC")
-  fun observeAllPlaylists(): Flow<List<PlaylistEntity>>
+  abstract fun observeAllPlaylists(): Flow<List<PlaylistEntity>>
 
   @Query("SELECT * FROM PlaylistEntity ORDER BY updatedAt DESC")
-  suspend fun getAllPlaylists(): List<PlaylistEntity>
+  abstract suspend fun getAllPlaylists(): List<PlaylistEntity>
 
   @Query("SELECT * FROM PlaylistEntity WHERE id = :playlistId")
-  suspend fun getPlaylistById(playlistId: Int): PlaylistEntity?
+  abstract suspend fun getPlaylistById(playlistId: Int): PlaylistEntity?
 
   @Query("SELECT * FROM PlaylistEntity WHERE id = :playlistId")
-  fun observePlaylistById(playlistId: Int): Flow<PlaylistEntity?>
+  abstract fun observePlaylistById(playlistId: Int): Flow<PlaylistEntity?>
 
   // Playlist item operations
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun insertPlaylistItem(item: PlaylistItemEntity)
+  abstract suspend fun insertPlaylistItem(item: PlaylistItemEntity)
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  suspend fun insertPlaylistItems(items: List<PlaylistItemEntity>)
+  abstract suspend fun insertPlaylistItems(items: List<PlaylistItemEntity>)
 
   @Update
-  suspend fun updatePlaylistItem(item: PlaylistItemEntity)
+  abstract suspend fun updatePlaylistItem(item: PlaylistItemEntity)
 
   @Delete
-  suspend fun deletePlaylistItem(item: PlaylistItemEntity)
+  abstract suspend fun deletePlaylistItem(item: PlaylistItemEntity)
 
   @Delete
-  suspend fun deletePlaylistItems(items: List<PlaylistItemEntity>)
+  abstract suspend fun deletePlaylistItems(items: List<PlaylistItemEntity>)
 
   @Query("DELETE FROM PlaylistItemEntity WHERE id = :itemId")
-  suspend fun deletePlaylistItemById(itemId: Int)
+  abstract suspend fun deletePlaylistItemById(itemId: Int)
 
   @Query("DELETE FROM PlaylistItemEntity WHERE id IN (:itemIds)")
-  suspend fun deletePlaylistItemsByIds(itemIds: List<Int>)
+  abstract suspend fun deletePlaylistItemsByIds(itemIds: List<Int>)
 
   @Query("SELECT * FROM PlaylistItemEntity WHERE playlistId = :playlistId ORDER BY position ASC")
-  fun observePlaylistItems(playlistId: Int): Flow<List<PlaylistItemEntity>>
+  abstract fun observePlaylistItems(playlistId: Int): Flow<List<PlaylistItemEntity>>
 
   @Query("SELECT * FROM PlaylistItemEntity WHERE playlistId = :playlistId ORDER BY position ASC")
-  suspend fun getPlaylistItems(playlistId: Int): List<PlaylistItemEntity>
+  abstract suspend fun getPlaylistItems(playlistId: Int): List<PlaylistItemEntity>
 
   @Query("SELECT COUNT(*) FROM PlaylistItemEntity WHERE playlistId = :playlistId")
-  suspend fun getPlaylistItemCount(playlistId: Int): Int
+  abstract suspend fun getPlaylistItemCount(playlistId: Int): Int
 
   @Query("SELECT COUNT(*) FROM PlaylistItemEntity WHERE playlistId = :playlistId")
-  fun observePlaylistItemCount(playlistId: Int): Flow<Int>
+  abstract fun observePlaylistItemCount(playlistId: Int): Flow<Int>
 
   @Query("DELETE FROM PlaylistItemEntity WHERE playlistId = :playlistId")
-  suspend fun deleteAllItemsFromPlaylist(playlistId: Int)
+  abstract suspend fun deleteAllItemsFromPlaylist(playlistId: Int)
 
   @Query("UPDATE PlaylistItemEntity SET position = :newPosition WHERE id = :itemId")
-  suspend fun updateItemPosition(itemId: Int, newPosition: Int)
+  abstract suspend fun updateItemPosition(itemId: Int, newPosition: Int)
 
   @Transaction
-  suspend fun reorderPlaylistItems(playlistId: Int, newOrder: List<Int>) {
+  open suspend fun reorderPlaylistItems(playlistId: Int, newOrder: List<Int>) {
     newOrder.forEachIndexed { index, itemId ->
       updateItemPosition(itemId, index)
     }
   }
 
-  @Query("SELECT MAX(position) FROM PlaylistItemEntity WHERE playlistId = :playlistId")
-  suspend fun getMaxPosition(playlistId: Int): Int?
+  @Query("SELECT MAX(position) AS maxPos FROM PlaylistItemEntity WHERE playlistId = :playlistId")
+  abstract suspend fun getMaxPosition(playlistId: Int): Int?
 
   @Query("SELECT filePath FROM PlaylistItemEntity WHERE playlistId = :playlistId ORDER BY position ASC LIMIT 1")
-  suspend fun getFirstPlaylistItemPath(playlistId: Int): String?
+  abstract suspend fun getFirstPlaylistItemPath(playlistId: Int): String?
 
   @Query("UPDATE PlaylistEntity SET customThumbnailPath = :path WHERE id = :playlistId")
-  suspend fun updateCustomThumbnailPath(playlistId: Int, path: String?)
+  abstract suspend fun updateCustomThumbnailPath(playlistId: Int, path: String?)
 
   @Query("""
     SELECT COALESCE(
       (SELECT customThumbnailPath FROM PlaylistEntity WHERE id = :playlistId),
       (SELECT filePath FROM PlaylistItemEntity WHERE playlistId = :playlistId ORDER BY position ASC LIMIT 1)
-    )
+    ) AS thumbnailPath
   """)
-  suspend fun getEffectiveThumbnailPath(playlistId: Int): String?
+  abstract suspend fun getEffectiveThumbnailPath(playlistId: Int): String?
 
   // Play history operations
   @Query(
@@ -107,7 +107,7 @@ interface PlaylistDao {
     WHERE playlistId = :playlistId AND filePath = :filePath
     """,
   )
-  suspend fun updatePlayHistory(playlistId: Int, filePath: String, timestamp: Long, position: Long)
+  abstract suspend fun updatePlayHistory(playlistId: Int, filePath: String, timestamp: Long, position: Long)
 
   @Query(
     """
@@ -117,7 +117,7 @@ interface PlaylistDao {
     LIMIT :limit
     """,
   )
-  suspend fun getRecentlyPlayedInPlaylist(playlistId: Int, limit: Int): List<PlaylistItemEntity>
+  abstract suspend fun getRecentlyPlayedInPlaylist(playlistId: Int, limit: Int): List<PlaylistItemEntity>
 
   @Query(
     """
@@ -127,7 +127,7 @@ interface PlaylistDao {
     LIMIT :limit
     """,
   )
-  fun observeRecentlyPlayedInPlaylist(playlistId: Int, limit: Int): Flow<List<PlaylistItemEntity>>
+  abstract fun observeRecentlyPlayedInPlaylist(playlistId: Int, limit: Int): Flow<List<PlaylistItemEntity>>
 
   @Query(
     """
@@ -135,7 +135,7 @@ interface PlaylistDao {
     WHERE playlistId = :playlistId AND filePath = :filePath
     """,
   )
-  suspend fun getPlaylistItemByPath(playlistId: Int, filePath: String): PlaylistItemEntity?
+  abstract suspend fun getPlaylistItemByPath(playlistId: Int, filePath: String): PlaylistItemEntity?
 
   // Pagination support for large playlists
   @Query(
@@ -146,7 +146,7 @@ interface PlaylistDao {
     LIMIT :limit OFFSET :offset
     """,
   )
-  suspend fun getPlaylistItemsWindow(playlistId: Int, offset: Int, limit: Int): List<PlaylistItemEntity>
+  abstract suspend fun getPlaylistItemsWindow(playlistId: Int, offset: Int, limit: Int): List<PlaylistItemEntity>
 
   @Query(
     """
@@ -155,5 +155,5 @@ interface PlaylistDao {
     ORDER BY position ASC
     """,
   )
-  suspend fun getPlaylistItemsInRange(playlistId: Int, startPosition: Int, endPosition: Int): List<PlaylistItemEntity>
+  abstract suspend fun getPlaylistItemsInRange(playlistId: Int, startPosition: Int, endPosition: Int): List<PlaylistItemEntity>
 }

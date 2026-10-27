@@ -25,10 +25,10 @@ interface HybridMediaDao {
   )
   suspend fun getAvailableMedia(includeNoMedia: Boolean): List<HybridMediaEntity>
 
-  @Query("SELECT COUNT(*) FROM hybrid_media_index WHERE available = 1")
+  @Query("SELECT COUNT(*) AS totalCount FROM hybrid_media_index WHERE available = 1")
   suspend fun getAvailableCount(): Int
 
-  @Query("SELECT COUNT(*) FROM hybrid_media_index WHERE available = 1 AND isNoMedia = 1")
+  @Query("SELECT COUNT(*) AS totalCount FROM hybrid_media_index WHERE available = 1 AND isNoMedia = 1")
   suspend fun getNoMediaCount(): Int
 
   @Query(

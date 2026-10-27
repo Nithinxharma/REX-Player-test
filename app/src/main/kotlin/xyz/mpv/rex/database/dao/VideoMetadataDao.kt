@@ -60,7 +60,7 @@ interface VideoMetadataDao {
   /**
    * Get total number of cached entries
    */
-  @Query("SELECT COUNT(*) FROM video_metadata_cache")
+  @Query("SELECT COUNT(*) AS totalCount FROM video_metadata_cache")
   suspend fun getCacheCount(): Int
 
   /**
@@ -84,7 +84,7 @@ interface VideoMetadataDao {
   /**
    * Get cache size in bytes (approximate)
    */
-  @Query("SELECT SUM(size) FROM video_metadata_cache")
+  @Query("SELECT SUM(size) AS totalSize FROM video_metadata_cache")
   suspend fun getTotalCacheSize(): Long?
 
   /**

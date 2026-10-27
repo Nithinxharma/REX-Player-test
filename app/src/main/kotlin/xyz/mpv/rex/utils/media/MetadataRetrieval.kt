@@ -7,6 +7,7 @@ import xyz.mpv.rex.database.repository.VideoMetadataCacheRepository
 import xyz.mpv.rex.domain.media.model.Video
 import xyz.mpv.rex.domain.media.model.VideoFolder
 import xyz.mpv.rex.preferences.BrowserPreferences
+import xyz.mpv.rex.preferences.preference.Preference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

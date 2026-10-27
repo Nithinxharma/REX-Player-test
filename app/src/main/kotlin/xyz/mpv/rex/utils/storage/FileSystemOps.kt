@@ -7,6 +7,7 @@ import xyz.mpv.rex.domain.browser.PathComponent
 import xyz.mpv.rex.domain.playbackstate.repository.PlaybackStateRepository
 import xyz.mpv.rex.preferences.AppearancePreferences
 import xyz.mpv.rex.preferences.BrowserPreferences
+import xyz.mpv.rex.preferences.preference.Preference
 import xyz.mpv.rex.database.repository.HybridMediaIndexRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

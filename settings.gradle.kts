@@ -44,5 +44,7 @@ dependencyResolutionManagement {
 rootProject.name = "mpvEx"
 include(":app")
 include(":cloudstream:library")
+include(":cloudstream:shared")
 
 project(":cloudstream:library").projectDir = file("cloudstream/library")
+project(":cloudstream:shared").projectDir = file("cloudstream/shared")

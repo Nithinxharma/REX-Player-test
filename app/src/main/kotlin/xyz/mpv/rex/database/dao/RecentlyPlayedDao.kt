@@ -133,14 +133,14 @@ interface RecentlyPlayedDao {
   )
   fun observeRecentlyPlayedPlaylists(limit: Int = 50): Flow<List<RecentlyPlayedPlaylistInfo>>
 
-  data class RecentlyPlayedPlaylistInfo(
-    val playlistId: Int,
-    val timestamp: Long,
-  )
-
   @Query("SELECT * FROM RecentlyPlayedEntity ORDER BY timestamp DESC")
   suspend fun getAllRecentlyPlayed(): List<RecentlyPlayedEntity>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun insertAll(items: List<RecentlyPlayedEntity>)
 }
+
+data class RecentlyPlayedPlaylistInfo(
+  val playlistId: Int,
+  val timestamp: Long,
+)

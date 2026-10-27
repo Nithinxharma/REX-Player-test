@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.android.lint)
     alias(libs.plugins.android.multiplatform.library)
     alias(libs.plugins.compose.multiplatform)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.compose.compiler)
 }
 
 kotlin {
@@ -29,34 +29,35 @@ kotlin {
             languageSettings {
                 optIn("com.lagradost.cloudstream3.InternalAPI")
                 optIn("com.lagradost.cloudstream3.Prerelease")
+                optIn("kotlin.uuid.ExperimentalUuidApi")
+                optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+                optIn("androidx.compose.material3.ExperimentalMaterial3Api")
             }
         }
 
         commonMain.dependencies {
-            implementation(libs.coil.network.ktor3)
-            implementation(libs.bundles.compose)
-            implementation(libs.kotlinx.collections.immutable)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.animation)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.coil)
+            implementation(libs.kotlinx.immutable.collections)
             implementation(project(":cloudstream:library"))
         }
 
         androidMain.dependencies {
-            implementation(libs.activity.compose)
-            implementation(libs.preference.ktx)
+            implementation(libs.androidx.activity.compose)
+            implementation("androidx.preference:preference-ktx:1.2.1")
             implementation(libs.ktor.client.android)
-        }
-
-        appleMain.dependencies {
-            implementation(libs.ktor.client.darwin)
         }
 
         jvmMain.dependencies {
             implementation(libs.ktor.client.java)
         }
     }
-}
-
-dependencies {
-    androidRuntimeClasspath(libs.compose.ui.tooling)
 }
 
 compose.resources {

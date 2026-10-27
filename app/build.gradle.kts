@@ -21,6 +21,10 @@ android {
     vectorDrawables {
       useSupportLibrary = true
     }
+
+    buildConfigField("Boolean", "IS_PREVIEW", "false")
+    buildConfigField("Int", "GIT_COUNT", "1")
+    buildConfigField("Boolean", "ENABLE_UPDATE_FEATURE", "false")
   }
 
   buildTypes {
@@ -84,7 +88,6 @@ dependencies {
   implementation(libs.accompanist.permissions)
 
   implementation(libs.room.runtime)
-  ksp(libs.room.compiler)
   implementation(libs.room.ktx)
 
   implementation(libs.kotlinx.immutable.collections)
@@ -108,6 +111,7 @@ dependencies {
   implementation(libs.compose.markdown)
 
   implementation(project(":cloudstream:library"))
+  implementation(project(":cloudstream:shared"))
 
   testImplementation(libs.junit)
   testImplementation("io.mockk:mockk:1.13.12")
