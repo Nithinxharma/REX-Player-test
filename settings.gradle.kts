@@ -23,7 +23,6 @@ dependencyResolutionManagement {
     maven(url = "https://mpvrex.github.io/mpvRex-libmpv")
     maven(url = "https://www.jitpack.io") {
       content {
-        // Only use JitPack for specific dependencies to avoid unnecessary checks
         includeGroup("com.github.sfsakhawat999")
         includeGroup("io.github.abdallahmehiz")
         includeGroup("com.github.abdallahmehiz")
@@ -32,9 +31,11 @@ dependencyResolutionManagement {
         includeGroup("com.github.thegrizzlylabs")
         includeGroup("com.github.nanihadesuka")
         includeGroup("com.github.jeziellago")
+        includeGroup("me.zhanghai.compose.preference")
         includeGroup("com.github.Blatzar")
-        includeGroup("com.github.teamnewpipe")
         includeGroup("com.github.TeamNewPipe")
+        includeGroup("com.github.teamnewpipe")
+        includeGroup("io.github.yubyf")
       }
     }
   }
@@ -43,7 +44,5 @@ dependencyResolutionManagement {
 rootProject.name = "mpvEx"
 include(":app")
 include(":cloudstream:library")
-include(":cloudstream:shared")
 
 project(":cloudstream:library").projectDir = file("cloudstream/library")
-project(":cloudstream:shared").projectDir = file("cloudstream/shared")

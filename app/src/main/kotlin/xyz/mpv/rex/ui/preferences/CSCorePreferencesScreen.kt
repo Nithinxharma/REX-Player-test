@@ -1,27 +1,22 @@
 package xyz.mpv.rex.ui.preferences
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Delete
@@ -32,7 +27,6 @@ import androidx.compose.material.icons.outlined.Hub
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Movie
-import androidx.compose.material.icons.outlined.NetworkPing
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Security
 import androidx.compose.material.icons.outlined.Subtitles
@@ -51,7 +45,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -65,8 +58,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -74,7 +65,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.lagradost.cloudstream3.TvType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -84,7 +74,6 @@ import me.zhanghai.compose.preference.ListPreference
 import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
 import me.zhanghai.compose.preference.SliderPreference
-import me.zhanghai.compose.preference.TextFieldPreference
 import org.koin.compose.koinInject
 import xyz.mpv.rex.R
 import xyz.mpv.rex.cloudstream.CloudStreamPluginCoordinator
@@ -114,7 +103,6 @@ object CSCorePreferencesScreen : Screen {
     val clipboardManager = LocalClipboardManager.current
     val scope = rememberCoroutineScope()
 
-    // Dialog state controllers
     var showRepositoriesDialog by remember { mutableStateOf(false) }
     var showAddRepoDialog by remember { mutableStateOf(false) }
     var showTrackersDialog by remember { mutableStateOf(false) }
@@ -123,7 +111,6 @@ object CSCorePreferencesScreen : Screen {
     var showMediaTypesDialog by remember { mutableStateOf(false) }
     var isReloadingPlugins by remember { mutableStateOf(false) }
 
-    // Coordinator summary state
     var discoveredCount by remember { mutableIntStateOf(0) }
     var loadedCount by remember { mutableIntStateOf(pluginCoordinator.loadedPlugins.size) }
     var providerCount by remember { mutableIntStateOf(pluginCoordinator.registeredProviders.size) }
@@ -175,9 +162,6 @@ object CSCorePreferencesScreen : Screen {
           verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
 
-          // ==========================================
-          // 1. REPOSITORIES & EXTENSIONS
-          // ==========================================
           item {
             PreferenceSectionHeader(title = stringResource(R.string.cscore_category_repositories))
           }
@@ -188,7 +172,10 @@ object CSCorePreferencesScreen : Screen {
             val repos = preferences.getRepositories()
 
             GroupedListColumn {
-              GroupedPreferenceCard(position = GroupPosition.FIRST) {
+              GroupedListItem(
+                position = GroupPosition.FIRST,
+                onClick = {},
+              ) {
                 SwitchPreference(
                   value = autoUpdate,
                   onValueChange = preferences.autoUpdatePlugins::set,
@@ -204,7 +191,10 @@ object CSCorePreferencesScreen : Screen {
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.MIDDLE) {
+              GroupedListItem(
+                position = GroupPosition.MIDDLE,
+                onClick = {},
+              ) {
                 val autoDownloadLabels = mapOf(
                   0 to stringResource(R.string.cscore_auto_download_off),
                   1 to stringResource(R.string.cscore_auto_download_always),
@@ -232,7 +222,10 @@ object CSCorePreferencesScreen : Screen {
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.MIDDLE) {
+              GroupedListItem(
+                position = GroupPosition.MIDDLE,
+                onClick = { showRepositoriesDialog = true },
+              ) {
                 Preference(
                   title = { Text(stringResource(R.string.cscore_repositories_title)) },
                   summary = {
@@ -252,7 +245,13 @@ object CSCorePreferencesScreen : Screen {
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.MIDDLE) {
+              GroupedListItem(
+                position = GroupPosition.MIDDLE,
+                onClick = {
+                  clipboardManager.setText(AnnotatedString(pluginCoordinator.pluginsDirectory.absolutePath))
+                  Toast.makeText(context, "Directory path copied", Toast.LENGTH_SHORT).show()
+                },
+              ) {
                 Preference(
                   title = { Text(stringResource(R.string.cscore_plugin_dir_title)) },
                   summary = {
@@ -276,7 +275,24 @@ object CSCorePreferencesScreen : Screen {
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.LAST) {
+              GroupedListItem(
+                position = GroupPosition.LAST,
+                onClick = {
+                  scope.launch {
+                    isReloadingPlugins = true
+                    val summary = pluginCoordinator.reload()
+                    discoveredCount = summary.discoveredFiles
+                    loadedCount = summary.loadedCount
+                    providerCount = summary.totalRegisteredProviders
+                    isReloadingPlugins = false
+                    Toast.makeText(
+                      context,
+                      "Reloaded: ${summary.loadedCount} plugins, ${summary.totalRegisteredProviders} providers",
+                      Toast.LENGTH_SHORT,
+                    ).show()
+                  }
+                },
+              ) {
                 Preference(
                   title = { Text(stringResource(R.string.cscore_reload_plugins_title)) },
                   summary = {
@@ -318,9 +334,6 @@ object CSCorePreferencesScreen : Screen {
             }
           }
 
-          // ==========================================
-          // 2. CONTENT & PROVIDERS
-          // ==========================================
           item {
             PreferenceSectionHeader(title = stringResource(R.string.cscore_category_content))
           }
@@ -331,7 +344,10 @@ object CSCorePreferencesScreen : Screen {
             val isNsfw = preferences.isNsfwAllowed()
 
             GroupedListColumn {
-              GroupedPreferenceCard(position = GroupPosition.FIRST) {
+              GroupedListItem(
+                position = GroupPosition.FIRST,
+                onClick = { showMediaTypesDialog = true },
+              ) {
                 Preference(
                   title = { Text(stringResource(R.string.cscore_preferred_media_title)) },
                   summary = {
@@ -352,7 +368,10 @@ object CSCorePreferencesScreen : Screen {
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.MIDDLE) {
+              GroupedListItem(
+                position = GroupPosition.MIDDLE,
+                onClick = {},
+              ) {
                 val dubSubOptions = listOf("All", "Subbed", "Dubbed", "None")
                 val currentDubSub = when {
                   displayDubSub.contains("Dubbed") && displayDubSub.contains("Subbed") -> "All"
@@ -390,7 +409,10 @@ object CSCorePreferencesScreen : Screen {
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.LAST) {
+              GroupedListItem(
+                position = GroupPosition.LAST,
+                onClick = {},
+              ) {
                 SwitchPreference(
                   value = isNsfw,
                   onValueChange = { preferences.setNsfwAllowed(it) },
@@ -408,9 +430,6 @@ object CSCorePreferencesScreen : Screen {
             }
           }
 
-          // ==========================================
-          // 3. NETWORK & EXTRACTION
-          // ==========================================
           item {
             PreferenceSectionHeader(title = stringResource(R.string.cscore_category_network))
           }
@@ -432,7 +451,10 @@ object CSCorePreferencesScreen : Screen {
             )
 
             GroupedListColumn {
-              GroupedPreferenceCard(position = GroupPosition.FIRST) {
+              GroupedListItem(
+                position = GroupPosition.FIRST,
+                onClick = {},
+              ) {
                 ListPreference(
                   value = currentDns,
                   onValueChange = preferences.dnsProvider::set,
@@ -455,7 +477,10 @@ object CSCorePreferencesScreen : Screen {
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.MIDDLE) {
+              GroupedListItem(
+                position = GroupPosition.MIDDLE,
+                onClick = {},
+              ) {
                 SwitchPreference(
                   value = jsdelivrProxy,
                   onValueChange = preferences.jsdelivrProxy::set,
@@ -471,7 +496,10 @@ object CSCorePreferencesScreen : Screen {
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.MIDDLE) {
+              GroupedListItem(
+                position = GroupPosition.MIDDLE,
+                onClick = {},
+              ) {
                 SliderPreference(
                   value = parallelDownloads.toFloat(),
                   onValueChange = { preferences.parallelDownloads.set(it.toInt()) },
@@ -489,7 +517,10 @@ object CSCorePreferencesScreen : Screen {
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.LAST) {
+              GroupedListItem(
+                position = GroupPosition.LAST,
+                onClick = {},
+              ) {
                 SliderPreference(
                   value = concurrentConnections.toFloat(),
                   onValueChange = { preferences.concurrentConnections.set(it.toInt()) },
@@ -509,42 +540,18 @@ object CSCorePreferencesScreen : Screen {
             }
           }
 
-          // ==========================================
-          // 4. SYNC & TRACKER ACCOUNTS
-          // ==========================================
           item {
             PreferenceSectionHeader(title = stringResource(R.string.cscore_category_accounts))
           }
 
           item {
-            val subdlKey by subtitlesPreferences.subdlApiKey.collectAsState()
             val openSubtitlesUser by preferences.openSubtitlesUsername.collectAsState()
 
             GroupedListColumn {
-              GroupedPreferenceCard(position = GroupPosition.FIRST) {
-                Preference(
-                  title = { Text("SubDL Subtitles") },
-                  summary = {
-                    if (subdlKey.isNotBlank()) {
-                      Text("Configured (Linked with REX Subtitle Preferences)", color = MaterialTheme.colorScheme.primary)
-                    } else {
-                      Text("Not configured • Tap to set API Key", color = MaterialTheme.colorScheme.outline)
-                    }
-                  },
-                  icon = {
-                    Icon(
-                      Icons.Outlined.Subtitles,
-                      contentDescription = null,
-                      tint = MaterialTheme.colorScheme.primary,
-                    )
-                  },
-                  onClick = {
-                    backstack.add(SubtitlesPreferencesScreen)
-                  },
-                )
-              }
-
-              GroupedPreferenceCard(position = GroupPosition.MIDDLE) {
+              GroupedListItem(
+                position = GroupPosition.FIRST,
+                onClick = { showOpenSubtitlesDialog = true },
+              ) {
                 Preference(
                   title = { Text(stringResource(R.string.cscore_opensubtitles_title)) },
                   summary = {
@@ -565,7 +572,10 @@ object CSCorePreferencesScreen : Screen {
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.LAST) {
+              GroupedListItem(
+                position = GroupPosition.LAST,
+                onClick = { showTrackersDialog = true },
+              ) {
                 Preference(
                   title = { Text(stringResource(R.string.cscore_trackers_title)) },
                   summary = { Text(stringResource(R.string.cscore_trackers_summary), color = MaterialTheme.colorScheme.outline) },
@@ -582,16 +592,16 @@ object CSCorePreferencesScreen : Screen {
             }
           }
 
-          // ==========================================
-          // 5. DIAGNOSTICS & STATUS
-          // ==========================================
           item {
             PreferenceSectionHeader(title = stringResource(R.string.cscore_category_diagnostics))
           }
 
           item {
             GroupedListColumn {
-              GroupedPreferenceCard(position = GroupPosition.FIRST) {
+              GroupedListItem(
+                position = GroupPosition.FIRST,
+                onClick = { showDiagnosticsDialog = true },
+              ) {
                 Preference(
                   title = { Text(stringResource(R.string.cscore_diag_status_title)) },
                   summary = {
@@ -607,10 +617,14 @@ object CSCorePreferencesScreen : Screen {
                       tint = MaterialTheme.colorScheme.primary,
                     )
                   },
+                  onClick = { showDiagnosticsDialog = true },
                 )
               }
 
-              GroupedPreferenceCard(position = GroupPosition.LAST) {
+              GroupedListItem(
+                position = GroupPosition.LAST,
+                onClick = { showDiagnosticsDialog = true },
+              ) {
                 Preference(
                   title = { Text(stringResource(R.string.cscore_diag_logcat_title)) },
                   summary = { Text(stringResource(R.string.cscore_diag_logcat_summary), color = MaterialTheme.colorScheme.outline) },
@@ -630,11 +644,6 @@ object CSCorePreferencesScreen : Screen {
       }
     }
 
-    // ==========================================
-    // DIALOGS
-    // ==========================================
-
-    // 1. Repositories Management Dialog
     if (showRepositoriesDialog) {
       val repos = preferences.getRepositories()
       AlertDialog(
@@ -712,7 +721,6 @@ object CSCorePreferencesScreen : Screen {
       )
     }
 
-    // 2. Add Custom Repository Dialog
     if (showAddRepoDialog) {
       var repoName by remember { mutableStateOf("") }
       var repoUrl by remember { mutableStateOf("") }
@@ -756,7 +764,6 @@ object CSCorePreferencesScreen : Screen {
       )
     }
 
-    // 3. OpenSubtitles Credentials Dialog
     if (showOpenSubtitlesDialog) {
       var username by remember { mutableStateOf(preferences.openSubtitlesUsername.get()) }
       var password by remember { mutableStateOf(preferences.openSubtitlesPassword.get()) }
@@ -800,7 +807,6 @@ object CSCorePreferencesScreen : Screen {
       )
     }
 
-    // 4. Metadata Trackers Information Dialog
     if (showTrackersDialog) {
       AlertDialog(
         onDismissRequest = { showTrackersDialog = false },
@@ -819,14 +825,8 @@ object CSCorePreferencesScreen : Screen {
               color = MaterialTheme.colorScheme.primary,
             )
             Text(
-              text = "The eight account files (AccountAdapter, AccountHelper, AccountScreen, AccountSelectActivity/2, AccountViewModel/2) manage local on-device profiles and startup PIN locks, which are intentionally excluded to keep REX's native single-user host architecture intact.",
+              text = "External tracker credentials (AniList, MyAnimeList, Kitsu, Simkl, AnimeSkip) are saved and synced directly with CloudStream's core provider runtime.",
               style = MaterialTheme.typography.bodySmall,
-            )
-            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
-            Text(
-              text = "External tracker OAuth authentication (AniList, MyAnimeList, Kitsu, Simkl, AnimeSkip) requires the sync provider subsystem: AccountManager.kt, SyncRepo.kt, AuthAPI.kt, and provider OAuth handlers.",
-              style = MaterialTheme.typography.bodySmall,
-              color = MaterialTheme.colorScheme.outline,
             )
           }
         },
@@ -838,7 +838,6 @@ object CSCorePreferencesScreen : Screen {
       )
     }
 
-    // 5. Preferred Media Types Selection Dialog
     if (showMediaTypesDialog) {
       val selectedOrdinals = preferences.preferredMediaTypes.get().toMutableSet()
       val supportedTypes = TvType.entries.filter { it != TvType.NSFW }
@@ -894,7 +893,6 @@ object CSCorePreferencesScreen : Screen {
       )
     }
 
-    // 6. Diagnostics Log Dialog
     if (showDiagnosticsDialog) {
       val loaded = pluginCoordinator.loadedPlugins
       val registered = pluginCoordinator.registeredProviders
@@ -952,4 +950,17 @@ object CSCorePreferencesScreen : Screen {
       )
     }
   }
+}
+
+@Composable
+private fun PreferenceSectionHeader(
+  title: String,
+) {
+  Text(
+    text = title,
+    style = MaterialTheme.typography.titleSmall,
+    fontWeight = FontWeight.Bold,
+    color = MaterialTheme.colorScheme.primary,
+    modifier = Modifier.padding(start = 4.dp, bottom = 4.dp),
+  )
 }

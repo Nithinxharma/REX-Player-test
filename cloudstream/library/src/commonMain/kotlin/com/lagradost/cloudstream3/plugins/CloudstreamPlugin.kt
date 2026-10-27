@@ -1,5 +1,8 @@
 package com.lagradost.cloudstream3.plugins
 
-@Suppress("unused")
+import java.lang.annotation.Inherited
+
+@Inherited
 @Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
 annotation class CloudstreamPlugin

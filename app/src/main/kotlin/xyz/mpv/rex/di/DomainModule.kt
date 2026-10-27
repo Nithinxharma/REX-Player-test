@@ -1,35 +1,21 @@
 package xyz.mpv.rex.di
 
-import xyz.mpv.rex.domain.anime4k.Anime4KManager
-import xyz.mpv.rex.domain.hdr.HdrToysManager
-import xyz.mpv.rex.repository.wyzie.WyzieSearchRepository
-import xyz.mpv.rex.ui.player.managers.PlaybackManager
-import xyz.mpv.rex.ui.player.HeadlessPlaybackController
-import okhttp3.OkHttpClient
+import android.content.Context
+import androidx.preference.PreferenceManager
 import org.koin.dsl.module
-import org.koin.android.ext.koin.androidContext
-import java.util.concurrent.TimeUnit
-
-import xyz.mpv.rex.ui.browser.miniplayer.MiniPlayerStateManager
+import xyz.mpv.rex.cloudstream.CloudStreamPluginCoordinator
+import xyz.mpv.rex.preferences.CSCorePreferences
+import xyz.mpv.rex.preferences.SubtitlesPreferences
+import xyz.mpv.rex.preferences.preference.AndroidPreferenceStore
+import xyz.mpv.rex.preferences.preference.PreferenceStore
 
 val domainModule = module {
-    single {
-        OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .build()
-    }
-    single { Anime4KManager(androidContext()) }
-    single { HdrToysManager(androidContext()) }
-    single { WyzieSearchRepository(androidContext(), get(), get(), get()) }
-    single { PlaybackManager(get()) }
-    single { MiniPlayerStateManager() }
-    single { HeadlessPlaybackController(androidContext()) }
-    single { xyz.mpv.rex.jellyfin.api.JellyfinApi(get(), get(), get()) }
-    single { xyz.mpv.rex.jellyfin.remote.JellyfinRemoteClient(get(), get(), get(), androidContext()) }
-    single { xyz.mpv.rex.domain.ytdl.YtDlClient(androidContext(), get()) }
-    single { xyz.mpv.rex.cloudstream.CloudStreamPluginCoordinator(androidContext()) }
+  single<PreferenceStore> {
+    val sp = PreferenceManager.getDefaultSharedPreferences(get<Context>())
+    AndroidPreferenceStore(sp)
+  }
+
+  single { CSCorePreferences(get()) }
+  single { SubtitlesPreferences(get()) }
+  single { CloudStreamPluginCoordinator(get()) }
 }
-
-
