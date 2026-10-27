@@ -15,6 +15,12 @@ data class CSCoreRepo(
   val iconUrl: String? = null,
 )
 
+/**
+ * Preferences for CloudStream Core (CSCore) integration in REX Player.
+ * Backed by the shared Android SharedPreferences store so that both REX's
+ * UI and CloudStream internal engines (network, plugins, repository managers)
+ * read and write the exact same underlying keys.
+ */
 class CSCorePreferences(
   private val preferenceStore: PreferenceStore,
 ) {
@@ -24,6 +30,7 @@ class CSCorePreferences(
     val DEFAULT_DUB_STATUS: Set<String> =
       DubStatus.entries.map { it.name }.toSet()
 
+    // Upstream CloudStream preference keys
     const val KEY_REPOSITORIES = "REPOSITORIES_KEY"
     const val KEY_AUTO_UPDATE_PLUGINS = "auto_update_plugins"
     const val KEY_AUTO_DOWNLOAD_PLUGINS = "auto_download_plugins_key2"
@@ -36,6 +43,7 @@ class CSCorePreferences(
     const val KEY_DOWNLOAD_CONCURRENT = "download_concurrent_key"
     const val KEY_USER_PROVIDER_API = "USER_PROVIDER_API"
 
+    // Subtitle and Tracker credentials
     const val KEY_OPENSUBTITLES_USERNAME = "cs_opensubtitles_username"
     const val KEY_OPENSUBTITLES_PASSWORD = "cs_opensubtitles_password"
     const val KEY_ANILIST_TOKEN = "cs_anilist_token"
@@ -66,20 +74,24 @@ class CSCorePreferences(
     }
   }
 
+  // Extensions & Repositories
   val autoUpdatePlugins = preferenceStore.getBoolean(KEY_AUTO_UPDATE_PLUGINS, true)
   val autoDownloadPlugins = preferenceStore.getInt(KEY_AUTO_DOWNLOAD_PLUGINS, 0)
   val repositoriesJson = preferenceStore.getString(KEY_REPOSITORIES, "[]")
 
+  // Content & Providers
   val preferredMediaTypes = preferenceStore.getStringSet(KEY_PREFER_MEDIA_TYPE, DEFAULT_PREFERRED_MEDIA)
   val providerLanguages = preferenceStore.getStringSet(KEY_PROVIDER_LANG, setOf(AllLanguagesName))
   val displayDubSub = preferenceStore.getStringSet(KEY_DISPLAY_SUB, DEFAULT_DUB_STATUS)
 
+  // Network & Extraction
   val dnsProvider = preferenceStore.getInt(KEY_DNS, 0)
   val jsdelivrProxy = preferenceStore.getBoolean(KEY_JSDELIVR_PROXY, false)
   val parallelDownloads = preferenceStore.getInt(KEY_DOWNLOAD_PARALLEL, 3)
   val concurrentConnections = preferenceStore.getInt(KEY_DOWNLOAD_CONCURRENT, 3)
   val customSites = preferenceStore.getString(KEY_USER_PROVIDER_API, "[]")
 
+  // Subtitle & Tracker Account Bridges
   val openSubtitlesUsername = preferenceStore.getString(KEY_OPENSUBTITLES_USERNAME, "")
   val openSubtitlesPassword = preferenceStore.getString(KEY_OPENSUBTITLES_PASSWORD, "")
   val anilistToken = preferenceStore.getString(KEY_ANILIST_TOKEN, "")

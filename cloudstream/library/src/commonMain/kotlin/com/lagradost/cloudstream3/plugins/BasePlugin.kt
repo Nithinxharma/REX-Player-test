@@ -1,22 +1,78 @@
 package com.lagradost.cloudstream3.plugins
 
-import android.content.Context
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.lagradost.cloudstream3.APIHolder
 import com.lagradost.cloudstream3.MainAPI
+import com.lagradost.cloudstream3.utils.ExtractorApi
+import com.lagradost.api.Log
+import com.lagradost.cloudstream3.utils.extractorApis
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-open class BasePlugin {
+const val PLUGIN_TAG = "PluginInstance"
+
+abstract class BasePlugin {
+
+    /**
+     * Used to register providers instances of MainAPI
+     * @param element MainAPI provider you want to register
+     */
+    fun registerMainAPI(element: MainAPI) {
+        Log.i(PLUGIN_TAG, "Adding ${element.name} (${element.mainUrl}) MainAPI")
+        element.sourcePlugin = this.filename
+        APIHolder.allProviders.add(element)
+        APIHolder.addPluginMapping(element)
+    }
+
+    /**
+     * Used to register extractor instances of ExtractorApi
+     * @param element ExtractorApi provider you want to register
+     */
+    fun registerExtractorAPI(element: ExtractorApi) {
+        Log.i(PLUGIN_TAG, "Adding ${element.name} (${element.mainUrl}) ExtractorApi")
+        element.sourcePlugin = this.filename
+        extractorApis.add(element)
+    }
+
+    /**
+     * Called when your Plugin is being unloaded
+     */
+    @Throws(Throwable::class)
+    open fun beforeUnload() {
+    }
+
+    /**
+     * Called when your Plugin is loaded
+     */
+    @Throws(Throwable::class)
+    open fun load() {
+    }
+
+    /** Full file path to the plugin. */
+    @Deprecated(
+        "Renamed to `filename` to follow conventions",
+        replaceWith = ReplaceWith("filename"),
+        level = DeprecationLevel.ERROR
+    )
+    var __filename: String?
+        get() = filename
+        set(value) {
+            filename = value
+        }
     var filename: String? = null
-    open fun load(context: Context) {}
-    open fun load() {}
-    open fun beforeUnload() {}
 
     @Serializable
-    data class Manifest(
-        val name: String? = null,
-        val pluginClassName: String? = null,
-        val version: Int? = 1,
-        val description: String? = null,
-        val authors: List<String> = emptyList(),
-        val url: String? = null
-    )
+    class Manifest {
+        @JsonProperty("name") @SerialName("name")
+        var name: String? = null
+
+        @JsonProperty("pluginClassName") @SerialName("pluginClassName")
+        var pluginClassName: String? = null
+
+        @JsonProperty("requiresResources") @SerialName("requiresResources")
+        var requiresResources: Boolean = false
+
+        @JsonProperty("version") @SerialName("version")
+        var version: Int? = null
+    }
 }
