@@ -248,7 +248,27 @@ object CSCorePreferencesScreen : Screen {
                       tint = MaterialTheme.colorScheme.primary,
                     )
                   },
-                  onClick = { showRepositoriesDialog = true },
+                  onClick = { backstack.add(CSCoreRepositoriesScreen) },
+                )
+              }
+
+              GroupedPreferenceCard(position = GroupPosition.MIDDLE) {
+                Preference(
+                  title = { Text("Provider Extensions") },
+                  summary = {
+                    Text(
+                      "$loadedCount plugin(s) loaded • Tap to browse & install extensions",
+                      color = MaterialTheme.colorScheme.outline,
+                    )
+                  },
+                  icon = {
+                    Icon(
+                      Icons.Outlined.Extension,
+                      contentDescription = null,
+                      tint = MaterialTheme.colorScheme.primary,
+                    )
+                  },
+                  onClick = { backstack.add(CSCoreExtensionsScreen) },
                 )
               }
 
@@ -596,7 +616,7 @@ object CSCorePreferencesScreen : Screen {
                   title = { Text(stringResource(R.string.cscore_diag_status_title)) },
                   summary = {
                     Text(
-                      stringResource(R.string.cscore_diag_status_summary, loadedCount, providerCount),
+                      stringResource(R.string.cscore_diag_status_summary, loadedCount, providerCount) + " • Tap to inspect active providers",
                       color = MaterialTheme.colorScheme.outline,
                     )
                   },
@@ -607,6 +627,7 @@ object CSCorePreferencesScreen : Screen {
                       tint = MaterialTheme.colorScheme.primary,
                     )
                   },
+                  onClick = { backstack.add(CSCoreProvidersScreen) },
                 )
               }
 

@@ -1,37 +1,30 @@
 [versions]
-agp = "9.1.0"
-commonsNet = "3.12.0"
-smbj = "0.14.0"
-kotlin = "2.4.10"
-composeBom = "2026.02.01"
-activityCompose = "1.12.4"
-koin = "4.1.1"
-lazycolumnscrollbar = "2.2.0"
-nanohttpd = "2.3.1"
-room = "2.8.4"
-navigation3 = "1.0.1"
-kotlinx-serialization = "1.10.0"
-accompanist = "0.37.3"
-okhttp = "5.3.2"
-sardineAndroid = "0.8"
-reorderable = "3.0.0"
-compose-markdown = "0.5.0"
-splashScreen = "1.0.1"
-junit = "4.13.2"
-mockk = "1.13.17"
-kotlinx-coroutines-test = "1.10.1"
-turbine = "1.2.0"
-
-# CloudStream core versions
-activity = "1.12.4"
+activity = "1.13.0"
+androidGradlePlugin = "9.1.1"
+animeDb = "1.0.2"
 annotation = "1.10.0"
-coil = "3.3.0"
-composeMaterial3 = "1.12.0-alpha03"
-composeMultiplatform = "1.12.0"
+appcompat = "1.7.1"
+biometric = "1.4.0-alpha07"
+buildkonfigGradlePlugin = "0.21.2"
+coil = { strictly = "3.3.0" }
+colorpicker = "6b46b49"
+conscryptAndroid = { strictly = "2.5.2" }
+constraintlayout = "2.2.1"
+coreKtx = "1.18.0"
 cryptography = "0.6.0"
-jacksonModuleKotlin = { strictly = "2.13.1" } # Later versions don't support minSdk <26 (Crashes on Android TV's and FireSticks)
+desugar_jdk_libs_nio = "2.1.5"
+dokkaGradlePlugin = "2.2.0"
+espressoCore = "3.7.0"
+fragmentKtx = "1.8.9"
+instancioCore = "5.6.0"
+jacksonModuleKotlin = { strictly = "2.13.1" }
+json = "20260522"
 jsoup = "1.22.1"
-kotlinGradlePlugin = "2.4.0"
+junit = "4.13.2"
+junitKtx = "1.3.0"
+junitVersion = "1.3.0"
+juniversalchardet = "2.5.0"
+kotlinGradlePlugin = "2.0.21"
 kotlinxAtomicfu = "0.33.0"
 kotlinxCollectionsImmutable = "0.5.2"
 kotlinxCoroutines = "1.11.0"
@@ -40,127 +33,146 @@ kotlinxIOCore = "0.9.1"
 kotlinxSerializationJson = "1.11.0"
 ksoup = "0.2.6"
 ktor = "3.5.0"
-lifecycleViewmodelCompose = "2.10.0"
+lifecycleKtx = "2.10.0"
+material = "1.14.0"
+media3 = "1.9.3"
+navigationKtx = "2.9.8"
 newpipeextractor = "v0.26.3"
+nextlibMedia3 = "1.9.3-0.12.0"
 nicehttp = "0.4.18"
+overlappingpanels = "0.1.5"
+paletteKtx = "1.0.0"
 preferenceKtx = "1.2.1"
-rhino = { strictly = "1.8.1" } # Requires minSdk 26 or later beginning at version 1.9.0
-jvmTarget = "11"
+previewseekbarMedia3 = "1.1.1.0"
+qrcodeKotlin = "4.5.0"
+rhino = { strictly = "1.8.1" }
+safefile = "0.0.8"
+shimmer = "0.5.0"
+torrentserver = "7861970"
+tvprovider = "1.1.0"
+video = "1.0.0"
+workRuntimeKtx = "2.11.2"
+zipline = "1.27.0"
+composeMaterial3 = "1.12.0-alpha03"
+composeMultiplatform = "1.12.0"
+lifecycleViewmodelCompose = "2.11.0"
+compileSdk = "36"
 minSdk = "26"
-compileSdk = "37"
 targetSdk = "36"
+jvmTarget = "17"
+constraintlayoutCompose = "1.1.0"
+room = "2.6.1"
+ksp = "2.0.21-1.0.28"
+koin = "3.5.6"
+composeBom = "2024.10.00"
+splashscreen = "1.0.1"
+securityCrypto = "1.1.0-alpha06"
+seeker = "2.0.1"
+composePrefs = "2.1.1"
+fsaf = "1.1.3"
+smbj = "0.13.0"
+commonsNet = "3.10.0"
+sardine = "0.8"
+nanohttpd = "2.3.1"
+scrollbar = "2.2.0"
+reorderable = "0.9.6"
+composeMarkdown = "0.5.0"
+mockk = "1.13.12"
+turbine = "1.1.0"
 
 [libraries]
+activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
+anime-db = { module = "com.github.sfsakhawat999:Anime-Db", version.ref = "animeDb" }
+annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+colorpicker = { module = "com.github.marlboro-advance:colorpicker", version.ref = "colorpicker" }
+conscrypt-android = { module = "org.conscrypt:conscrypt-android", version.ref = "conscryptAndroid" }
+constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+cryptography-core = { module = "dev.whyoleg.cryptography:cryptography-core", version.ref = "cryptography" }
+cryptography-provider-optimal = { module = "dev.whyoleg.cryptography:cryptography-provider-optimal", version.ref = "cryptography" }
+desugar_jdk_libs_nio = { module = "com.android.tools:desugar_jdk_libs_nio", version.ref = "desugar_jdk_libs_nio" }
+espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+instancio-core = { module = "org.instancio:instancio-core", version.ref = "instancioCore" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonModuleKotlin" }
+json = { module = "org.json:json", version.ref = "json" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { module = "junit:junit", version.ref = "junit" }
-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
-kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }
-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashScreen" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-commons-net = { module = "commons-net:commons-net", version.ref = "commonsNet" }
-smbj = { module = "com.hierynomus:smbj", version.ref = "smbj" }
-lazycolumnscrollbar = { module = "com.github.nanihadesuka:LazyColumnScrollbar", version.ref = "lazycolumnscrollbar" }
-nanohttpd = { module = "org.nanohttpd:nanohttpd", version.ref = "nanohttpd" }
-sardine-android = { module = "com.github.thegrizzlylabs:sardine-android", version.ref = "sardineAndroid" }
-saveable = { group = "androidx.compose.runtime", name = "runtime-saveable", version = "1.10.4" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-material3-android = { group = "androidx.compose.material3", name = "material3", version = "1.5.0-alpha15" }
-androidx-compose-material = { group = "androidx.compose.material", name = "material" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.7.1" }
-androidx-material3-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version = "1.7.8" }
-androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.1.1" }
-androidx-compose-animation-graphics = { group = "androidx.compose.animation", name = "animation-graphics-android" }
-mediasession = { group = "androidx.media", name = "media", version = "1.7.1" }
-androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
-androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
-androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version = "1.1.0" }
-seeker = "com.github.abdallahmehiz:seeker:2.0.1"
-mediainfo-lib = "com.github.marlboro-advance:mediainfoAndroid:v1.0.0-fix"
-mpv-lib = "com.github.sfsakhawat999:mpvRex-libmpv:0.0.9"
+junit-ktx = { module = "androidx.test.ext:junit-ktx", version.ref = "junitKtx" }
+junit-version = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
+juniversalchardet = { module = "com.github.albfernandez:juniversalchardet", version.ref = "juniversalchardet" }
+kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlinxAtomicfu" }
+kotlinx-immutable-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinxIOCore" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+ksoup = { module = "com.fleeksoft.ksoup:ksoup", version.ref = "ksoup" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-encoding = { module = "io.ktor:ktor-client-encoding", version.ref = "ktor" }
+ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-http = { module = "io.ktor:ktor-http", version.ref = "ktor" }
+nicehttp = { module = "com.github.Blatzar:NiceHttp", version.ref = "nicehttp" }
+rhino = { module = "org.mozilla:rhino", version.ref = "rhino" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlinGradlePlugin" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinGradlePlugin" }
+newpipeextractor = { module = "com.github.TeamNewPipe:NewPipeExtractor", version.ref = "newpipeextractor" }
 
+splashScreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-ui = { module = "androidx.compose.ui:ui" }
+androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-material3-android = { module = "androidx.compose.material3:material3" }
+androidx-compose-material = { module = "androidx.compose.material:material" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-compose-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
+androidx-material3-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+androidx-compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
+mediasession = { module = "androidx.media:media", version = "1.7.0" }
+androidx-documentfile = { module = "androidx.documentfile:documentfile", version = "1.0.1" }
+saveable = { module = "androidx.compose.runtime:runtime-saveable" }
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
-koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
-koin-compose = { module = "io.insert-koin:koin-compose" }
-koin-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
-
-compose-prefs = { module = "me.zhanghai.compose.preference:preference", version = "2.1.1" }
-
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
+seeker = { module = "com.github.abdallahmehiz:seeker", version.ref = "seeker" }
+compose-prefs = { module = "me.zhanghai.compose.preference:preference", version.ref = "composePrefs" }
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version = "0.36.0" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-
-
-kotlinx-immutable-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.4.0" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
-
+okhttp = { module = "com.squareup.okhttp3:okhttp", version = "4.12.0" }
 truetype-parser = { module = "io.github.yubyf:truetypeparser-light", version = "2.1.4" }
-fsaf = { module = "com.github.K1rakishou:Fuck-Storage-Access-Framework", version = "1.1.3" }
-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
-androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version = "1.1.0-alpha06" }
-
-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
-reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
-compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "compose-markdown" }
-
-# CloudStream library dependencies
-annotation = { module = "androidx.annotation:annotation", version = { ref = "annotation" } }
-cryptography-core = { module = "dev.whyoleg.cryptography:cryptography-core", version = { ref = "cryptography" } }
-cryptography-provider-optimal = { module = "dev.whyoleg.cryptography:cryptography-provider-optimal", version = { ref = "cryptography" } }
-jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version = { ref = "jacksonModuleKotlin" } }
-jsoup = { module = "org.jsoup:jsoup", version = { ref = "jsoup" } }
-kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version = { ref = "kotlinGradlePlugin" } }
-kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version = { ref = "kotlinGradlePlugin" } }
-kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version = { ref = "kotlinxAtomicfu" } }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = { ref = "kotlinxCoroutines" } }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = { ref = "kotlinxDatetime" } }
-kotlinx-io-core = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version = { ref = "kotlinxIOCore" } }
-ksoup = { module = "com.fleeksoft.ksoup:ksoup", version = { ref = "ksoup" } }
-ktor-http = { module = "io.ktor:ktor-http", version = { ref = "ktor" } }
-newpipeextractor = { module = "com.github.teamnewpipe:NewPipeExtractor", version = { ref = "newpipeextractor" } }
-nicehttp = { module = "com.github.Blatzar:NiceHttp", version = { ref = "nicehttp" } }
-rhino = { module = "org.mozilla:rhino", version = { ref = "rhino" } }
-
-activity-compose = { module = "androidx.activity:activity-compose", version = { ref = "activity" } }
-coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version = { ref = "coil" } }
-kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = { ref = "kotlinxCollectionsImmutable" } }
-ktor-client-android = { module = "io.ktor:ktor-client-android", version = { ref = "ktor" } }
-ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version = { ref = "ktor" } }
-ktor-client-java = { module = "io.ktor:ktor-client-java", version = { ref = "ktor" } }
-preference-ktx = { module = "androidx.preference:preference-ktx", version = { ref = "preferenceKtx" } }
-compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version = { ref = "composeMultiplatform" } }
-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version = { ref = "composeMaterial3" } }
-compose-resources = { module = "org.jetbrains.compose.components:components-resources", version = { ref = "composeMultiplatform" } }
-compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version = { ref = "composeMultiplatform" } }
-compose-ui = { module = "org.jetbrains.compose.ui:ui", version = { ref = "composeMultiplatform" } }
-compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version = { ref = "composeMultiplatform" } }
-compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version = { ref = "composeMultiplatform" } }
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version = { ref = "coil" } }
-
-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
-
-[bundles]
-koin = ["koin-core", "koin-android", "koin-compose", "koin-viewmodel"]
-compose-navigation3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui"]
-cryptography = ["cryptography-core", "cryptography-provider-optimal"]
-compose = ["compose-foundation", "compose-material3", "compose-resources", "compose-runtime", "compose-ui", "compose-ui-tooling", "compose-ui-tooling-preview", "lifecycle-viewmodel-compose", "coil-compose"]
+fsaf = { module = "com.github.K1rakishou:Fuck-Storage-Access-Framework", version.ref = "fsaf" }
+mediainfo-lib = { module = "com.github.marlboro-advance:mediainfoAndroid", version = "v1.0.0-fix" }
+mpv-lib = { module = "com.github.sfsakhawat999:mpvRex-libmpv", version = "0.0.9" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
+smbj = { module = "com.hierynomus:smbj", version.ref = "smbj" }
+commons-net = { module = "commons-net:commons-net", version.ref = "commonsNet" }
+sardine-android = { module = "com.github.thegrizzlylabs:sardine-android", version.ref = "sardine" }
+nanohttpd = { module = "org.nanohttpd:nanohttpd", version.ref = "nanohttpd" }
+lazycolumnscrollbar = { module = "com.github.nanihadesuka:LazyColumnScrollbar", version.ref = "scrollbar" }
+reorderable = { module = "org.burnoutcrew.composereorderable:reorderable", version.ref = "reorderable" }
+compose-markdown = { module = "com.github.jeziellago:compose-markdown", version.ref = "composeMarkdown" }
 
 [plugins]
-ksp = { id = "com.google.devtools.ksp", version = "2.3.9" }
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinGradlePlugin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinGradlePlugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
-kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-android-lint = { id = "com.android.lint", version.ref = "agp" }
-android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
-buildkonfig = { id = "com.codingfeline.buildkonfig", version = "0.21.2" }
-dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlinGradlePlugin" }
+android-lint = { id = "com.android.lint", version.ref = "androidGradlePlugin" }
+android-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "androidGradlePlugin" }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfigGradlePlugin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokkaGradlePlugin" }
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }

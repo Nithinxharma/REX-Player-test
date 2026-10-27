@@ -1,0 +1,6 @@
+{
+  "name": "REX Player",
+  "description": "High-performance MPV media player with integrated CloudStream extension core and Jetpack Compose interface.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

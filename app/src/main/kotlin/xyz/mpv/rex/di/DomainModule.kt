@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit
 
 import xyz.mpv.rex.ui.browser.miniplayer.MiniPlayerStateManager
 
+@OptIn(com.lagradost.cloudstream3.InternalAPI::class, kotlin.uuid.ExperimentalUuidApi::class)
 val domainModule = module {
     single {
         OkHttpClient.Builder()
@@ -30,6 +31,15 @@ val domainModule = module {
     single { xyz.mpv.rex.jellyfin.remote.JellyfinRemoteClient(get(), get(), get(), androidContext()) }
     single { xyz.mpv.rex.domain.ytdl.YtDlClient(androidContext(), get()) }
     single { xyz.mpv.rex.cloudstream.CloudStreamPluginCoordinator(androidContext()) }
+    single<com.lagradost.cloudstream4.viewmodels.RepositoryManager> {
+        xyz.mpv.rex.cloudstream.REXRepositoryManager(androidContext(), get(), get(), get())
+    }
+    single {
+        com.lagradost.cloudstream4.AppSettings(androidContext())
+    }
+    factory {
+        com.lagradost.cloudstream4.viewmodels.ExtensionsViewModel2(get(), get())
+    }
 }
 
 
